@@ -1,0 +1,63 @@
+package plugin
+
+import nl.bartpelle.veteres.model.World
+import nl.bartpelle.veteres.plugin.PluginListener
+import nl.bartpelle.veteres.plugin.PluginSignature
+import nl.bartpelle.veteres.plugin.PluginSignatureException
+
+import java.lang.reflect.Modifier
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.logging.Logger
+
+final class PluginBootstrap {
+
+    private static int count
+
+    PluginBootstrap(Logger logger) {
+        clear()
+        provide()
+        logger.info "The Bootstrap has been initialized with ${count} plugins!"
+    }
+
+    static def clear() {
+        count = 0
+        World.getPluginHandler().clear()
+        //MinigameHandler.MINIGAMES.clear()
+    }
+
+    static def provide() {
+        List<Class<?>> listeners = init "./bin/plugin/"
+        listeners.each { World.getPluginHandler().submit it }
+    }
+
+    static List<Class<?>> init(dir) {
+        List<Class<?>> listeners = new LinkedList<>()
+        Files.walkFileTree(Paths.get(dir),
+                new SimpleFileVisitor<Path>() {
+                    @Override
+                    FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                        File file = path.toFile()
+                        String name = file.name
+                        if(!name.endsWith(".class") || name.contains("\$"))
+                            return FileVisitResult.CONTINUE
+                        String formatted = file.path.replace(File.separator, ".").substring(0, file.path.lastIndexOf(".")).replace("bin.", "").replace("..", "")
+                        Class<?> c = Class.forName(formatted)
+                        c.interfaces.each {
+                            if(it == PluginListener.class && c.getAnnotation(PluginSignature.class) == null)
+                                throw new PluginSignatureException(c)
+                        }
+                        if (!Modifier.isAbstract(c.modifiers) && !Modifier.isInterface(c.modifiers) && c.getAnnotations().length > 0) {
+                            listeners.add(c)
+                            count++
+                        }
+                        return FileVisitResult.CONTINUE
+                    }
+                })
+        return listeners
+    }
+}

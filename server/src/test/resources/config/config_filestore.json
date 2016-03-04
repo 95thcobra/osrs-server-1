@@ -1,0 +1,14 @@
+{
+    "listenport" : 43594,
+    "listenaddress" : "0.0.0.0",
+    "servername" : "Veteres",
+
+    "acceptthreads" : 1,
+    "iothreads" : 2,
+
+    "revision" : 60,
+    "forcerevision" : true,
+
+    "mapkeys" : "data/map/keys.bin"
+
+}
