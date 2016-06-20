@@ -8,6 +8,7 @@ import nl.bartpelle.veteres.model.World;
 import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.PathQueue;
 import nl.bartpelle.veteres.model.entity.Player;
+import nl.bartpelle.veteres.model.entity.player.Privilege;
 import nl.bartpelle.veteres.net.message.game.Action;
 import nl.bartpelle.veteres.net.message.game.PacketInfo;
 
@@ -38,7 +39,8 @@ public class NpcAction1 implements Action {
 
         player.message("npcaction1 --- npcindex:" + index + " run:" + run);
         Npc other = player.world().npcs().get(index);
-        player.message("npcid:" + other.id() + " run:" + run);
+        int npcId = other.id();
+        player.message("npcid:" + npcId + " run:" + run);
 
         if (other == null) {
             player.message("Unable to find npc.");
@@ -47,10 +49,28 @@ public class NpcAction1 implements Action {
                 player.stepTowards(other, 20);
                 player.face(other);
 
+
+                handleNpcFirstClick(player, npcId);
+
+
                 //player.putattrib(AttributeKey.TARGET_TYPE, 1);
                 //player.putattrib(AttributeKey.TARGET, index);
                 //player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
             }
+        }
+    }
+
+    private void handleNpcFirstClick(Player player, int npcId) {
+        switch (npcId) {
+
+            case 4400:
+                // Wizard edgeville TODO: find options interface
+                final int interfaceId = 72;
+                final int parentInterfaceId = 162;
+                final int positionId = 546;
+                player.interfaces().send(interfaceId, parentInterfaceId, positionId, false);
+                break;
+
         }
     }
 }

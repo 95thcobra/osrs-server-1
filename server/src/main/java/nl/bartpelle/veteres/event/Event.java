@@ -8,6 +8,7 @@ import nl.bartpelle.veteres.model.entity.Player;
 public abstract class Event {
 
         public abstract void execute(EventContainer container);
-        public abstract void stop();
+        public void stop() {
 
+        }
     }

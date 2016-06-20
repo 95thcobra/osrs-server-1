@@ -83,13 +83,38 @@ public final class GameCommands {
 
         put(Privilege.ADMIN, "loopinter", (p, args) -> {
             new Thread(() -> {
-                int interfaceId = 150;
+                int interfaceId = 0;
                 while (interfaceId++ < 750) {
                     p.interfaces().sendMain(interfaceId, false);
                     p.message("Interface: " + interfaceId);
                     System.out.println("Interface: " + interfaceId);
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        });
+
+        put(Privilege.ADMIN, "interdia", (p, args) -> {
+            int interfaceId = 72;
+            int positionId = 0;
+            while (positionId++ < 200) {
+                p.interfaces().send(interfaceId, 548, positionId, false); // chatbox
+                System.out.println("pos id: " + positionId);
+            }
+        });
+
+        put(Privilege.ADMIN, "loopinterpos", (p, args) -> {
+            new Thread(() -> {
+                int interfaceId = 72;
+                int positionId = 76;
+                while (positionId++ < 200) {
+                    p.interfaces().send(interfaceId, 548, positionId, true); // chatbox
+                    System.out.println("pos id: " + positionId);
+                    try {
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -258,11 +283,11 @@ public final class GameCommands {
         });
         put(Privilege.ADMIN, "input", (p, args) -> {
             p.inputHelper().provideAlphaNumerical("Is William Gay?", new AlphaNumericalInput() {
-				@Override
-				public void execute(Player player, String value) {
-					System.out.println("The value is: " + value);
-				}
-			});
+                @Override
+                public void execute(Player player, String value) {
+                    System.out.println("The value is: " + value);
+                }
+            });
         });
         put(Privilege.PLAYER, "ancients", (p, args) -> p.varps().varbit(4070, 1));
         put(Privilege.PLAYER, "modern", (p, args) -> p.varps().varbit(4070, 0));

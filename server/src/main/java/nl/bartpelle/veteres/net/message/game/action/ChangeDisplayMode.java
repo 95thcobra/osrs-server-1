@@ -34,9 +34,9 @@ public class ChangeDisplayMode implements Action {
 		player.interfaces().resizable(displayMode == 2);
 
 		// If we changed, push it. TODO fix this?
-		if (wasResizable != player.interfaces().resizable()) {
+		/*if (wasResizable != player.interfaces().resizable()) {
 			player.interfaces().closeAll();
-		}
+		}*/
 
 		if (player.interfaces().resizable()) {
 			player.interfaces().sendResizable();

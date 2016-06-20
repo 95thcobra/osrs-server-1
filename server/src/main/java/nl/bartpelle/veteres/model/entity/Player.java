@@ -127,28 +127,6 @@ public class Player extends Entity {
         super(null, null);
     }
 
-    public void delay(int cycles) {
-        this.world().getEventHandler().addEvent(this, cycles, new Event() {
-            int count = 0;
-
-            @Override
-            public void execute(EventContainer container) {
-                if (count >= 1) {
-                    container.stop();
-                }
-                message("locked!");
-                lock();
-                count++;
-            }
-
-            @Override
-            public void stop() {
-                message("unlocked!");
-                unlock();
-            }
-        });
-    }
-
     /**
      * Sends everything required to make the user see the game.
      */
@@ -164,11 +142,7 @@ public class Player extends Entity {
         //world.server().scriptRepository().triggerLogin(this);
 
         // Execute groovy plugin
-        world.getPluginHandler().
-
-                execute(this, LoginPlugin.class, new LoginPlugin()
-
-                );
+        world.getPluginHandler().execute(this, LoginPlugin.class, new LoginPlugin());
 
         varps.sync(1055);
 
@@ -181,6 +155,14 @@ public class Player extends Entity {
 
         // Sync varps
         varps.syncNonzero();
+    }
+
+    public void event(Event event) {
+        event(event, 1);
+    }
+
+    public void event(Event event, int ticks) {
+        world.getEventHandler().addEvent(this, ticks, event);
     }
 
     public void updatePrivileges() {
@@ -212,8 +194,14 @@ public class Player extends Entity {
     public void stopActions(boolean cancelMoving) {
         super.stopActions(cancelMoving);
 
+        // Reset main interface
         if (interfaces.visible(interfaces.activeRoot(), interfaces.mainComponent())) {
             interfaces.close(interfaces.activeRoot(), interfaces.mainComponent());
+        }
+
+        // Reset chatbox interface
+        if (interfaces.visible(162, 546)) {
+            interfaces.close(162, 546);
         }
     }
 
