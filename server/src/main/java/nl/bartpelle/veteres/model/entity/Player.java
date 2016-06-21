@@ -2,6 +2,7 @@ package nl.bartpelle.veteres.model.entity;
 
 import com.google.common.base.MoreObjects;
 import io.netty.channel.Channel;
+import nl.bartpelle.veteres.aquickaccess.events.TeleportEvent;
 import nl.bartpelle.veteres.content.mechanics.Death;
 import nl.bartpelle.veteres.crypto.IsaacRand;
 import nl.bartpelle.veteres.event.Event;
@@ -81,6 +82,7 @@ public class Player extends Entity {
      */
     private IsaacRand outrand;
 
+
     /**
      * A list of pending actions which are decoded at the next game cycle.
      */
@@ -92,6 +94,16 @@ public class Player extends Entity {
 
     private Varps varps;
     private InputHelper inputHelper;
+
+    private int dialogueAction = -1;
+
+    public int getDialogueAction() {
+        return dialogueAction;
+    }
+
+    public void setDialogueAction(int dialogueAction) {
+        this.dialogueAction = dialogueAction;
+    }
 
     /**
      * The ID of the last applied migration.
@@ -474,5 +486,19 @@ public class Player extends Entity {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", id).add("username", username)
                 .add("displayName", displayName).add("tile", tile).add("privilege", privilege).toString();
+    }
+
+    //////////////////
+
+    public void teleportWithAnimation(int x, int y) {
+        teleportWithAnimation(x, y, 0);
+    }
+
+    public void teleportWithAnimation(int x, int y, int level) {
+        teleportWithAnimation(new Tile(x, y));
+    }
+
+    public void teleportWithAnimation(Tile tile) {
+        world().getEventHandler().addEvent(this, new TeleportEvent(this, tile));
     }
 }

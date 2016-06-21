@@ -15,7 +15,9 @@ public class NpcClick1Action {
                         "Where would you like to teleport to?",
                         "Edgeville",
                         "Varrock",
-                        "Falador");
+                        "Falador",
+                        "Nowhere");
+                player.setDialogueAction(1);
                 break;
         }
     }

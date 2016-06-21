@@ -1,4 +1,4 @@
-[2016-06-21T11:45:44,811 ERROR] nl.bartpelle.veteres.services.redis.RedisService - Could not connect to Redis service on localhost:6379 with timeout 2000.
-[2016-06-21T11:45:44,812 ERROR] nl.bartpelle.veteres.services.redis.RedisService - 	redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
-[2016-06-21T11:45:45,815 ERROR] nl.bartpelle.veteres.services.intercom.pm.RedisPmService - Cannot use Redis PM service if the Redis service failed to start
-[2016-06-21T11:45:46,817 ERROR] nl.bartpelle.veteres.services.intercom.clanchat.RedisClanChatService - Cannot use Redis Clan Chat service if the Redis service failed to start
+[2016-06-21T15:03:10,972 ERROR] nl.bartpelle.veteres.services.redis.RedisService - Could not connect to Redis service on localhost:6379 with timeout 2000.
+[2016-06-21T15:03:10,972 ERROR] nl.bartpelle.veteres.services.redis.RedisService - 	redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+[2016-06-21T15:03:11,984 ERROR] nl.bartpelle.veteres.services.intercom.pm.RedisPmService - Cannot use Redis PM service if the Redis service failed to start
+[2016-06-21T15:03:12,997 ERROR] nl.bartpelle.veteres.services.intercom.clanchat.RedisClanChatService - Cannot use Redis Clan Chat service if the Redis service failed to start

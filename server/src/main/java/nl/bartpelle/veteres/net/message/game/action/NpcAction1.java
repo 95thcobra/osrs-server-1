@@ -48,7 +48,6 @@ public class NpcAction1 implements Action {
                 player.stepTowards(other, 20);
                 player.face(other);
 
-
                // player.tile().distance(other.tile()) <= 2
                  player.world().getEventHandler().addEvent(player, new ClickNpcEvent(player, other));
 

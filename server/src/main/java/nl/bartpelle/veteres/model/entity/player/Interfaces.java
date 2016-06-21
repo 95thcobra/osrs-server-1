@@ -150,6 +150,10 @@ public class Interfaces {
         close(activeRoot, mainComponent());
     }
 
+    public void closeChatDialogue() {
+        close(162, 546);
+    }
+
     public void close(int target, int targetChild) {
         close((target << 16) | targetChild);
     }

@@ -2,6 +2,7 @@ package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
 import nl.bartpelle.skript.WaitReason;
+import nl.bartpelle.veteres.aquickaccess.dialogue.DialogueAction;
 import nl.bartpelle.veteres.io.RSBuffer;
 import nl.bartpelle.veteres.model.AttributeKey;
 import nl.bartpelle.veteres.model.entity.Player;
@@ -35,11 +36,15 @@ public class DialogueContinue implements Action {
 		int id = hash >>16;
 		int child = hash & 0xFFFF;
 
-		Object returnval = null;
+		//Object returnval = null;
+		int returnval = -1;
 		if (id == 219) {
 			returnval = slot;
 		}
 
-		player.world().server().scriptExecutor().continueFor(player, WaitReason.DIALOGUE, returnval);
+
+	player.message("Dialogue action: id:"+id+" child:"+child + " returnval:"+returnval);
+		new DialogueAction().handleDialog(player, returnval);
+		//player.world().server().scriptExecutor().continueFor(player, WaitReason.DIALOGUE, returnval);
 	}
 }

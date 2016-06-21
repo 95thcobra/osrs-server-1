@@ -27,11 +27,11 @@ public class EventHandler {
     }
 
     public void addEvent(Player player, Event event) {
-        this.events.add(new EventContainer(player, 0, event));
+        addEvent(player, 0, event);
     }
 
     public void addEvent(Player player, int ticks, Event event) {
-        this.events.add(new EventContainer(player, ticks, event));
+        addEvent(new EventContainer(player, ticks, event));
     }
 
     public void addEvent(EventContainer event) {
