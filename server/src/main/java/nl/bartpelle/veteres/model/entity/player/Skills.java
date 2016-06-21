@@ -3,6 +3,7 @@ package nl.bartpelle.veteres.model.entity.player;
 import nl.bartpelle.veteres.fs.EnumDefinition;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.UpdateSkill;
+import nl.bartpelle.veteres.util.Varbit;
 
 import java.util.Arrays;
 
@@ -50,6 +51,12 @@ public class Skills {
 
     public double[] xp() {
         return xps;
+    }
+
+    public void toggleXPCounter() {
+        boolean enabled = player.varps().varbit(Varbit.XP_DROPS_ORB) == 1;
+        player.varps().varbit(Varbit.XP_DROPS_ORB, enabled ? 0 : 1);
+        player.varps().varbit(Varbit.XP_DROPS_COUNTER, enabled ? 30 : 0);
     }
 
     public void setXp(int skill, double amt) {

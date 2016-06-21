@@ -5,6 +5,7 @@ import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.InvokeScript;
 import nl.bartpelle.veteres.util.SettingsBuilder;
 import nl.bartpelle.veteres.util.Varbit;
+import nl.bartpelle.veteres.util.Varp;
 
 /**
  * Created by Sky on 21-6-2016.
@@ -33,9 +34,23 @@ public class ButtonClickAction {
                 XPDropToggles();
                 break;
 
-            // XP Drops
             case 160:
-                setupXPDrops();
+                // XP Drops
+                if (buttonId == 1) {
+                    setupXPDrops();
+                }
+
+                // Toggle running
+                if (buttonId == 22) {
+                    player.pathQueue().toggleRunning();
+                }
+                break;
+
+            // Logout
+            case 182:
+                if (buttonId == 6) {
+                    player.logout();
+                }
                 break;
 
             // Spellbook
@@ -48,7 +63,7 @@ public class ButtonClickAction {
     ////////////////
 
     private void XPDropToggles() {
-        switch(buttonId) {
+        switch (buttonId) {
 
             // Position
             case 50:
@@ -94,6 +109,9 @@ public class ButtonClickAction {
 
     private void setupXPDrops() {
         // Toggle XP drops
+        if (option == 0) {
+            player.skills().toggleXPCounter();
+        }
 
         // Setup XP drops
         if (option == 1) {

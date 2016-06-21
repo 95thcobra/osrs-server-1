@@ -17,4 +17,9 @@ public class Varbit {
 	public static final int XP_DROPS_PROGRESSBAR = 4698;
 	public static final int XP_DROPS_SPEED = 4722;
 
+	public static final int XP_DROPS_ORB = 4702;
+
+	public static final int TRANSPARENT_CHAT_BOX = 4608;
+
+	public static final int IRONMAN = 1777;
 }

@@ -102,11 +102,28 @@ public final class GameCommands {
             new DialogueHandler().sendOptionDialogue(p, "Where would you like to teleport to?", "Edgeville", "Varrock", "Falador");
         });
 
+        put(Privilege.ADMIN, "xpdrop", (p, args) -> {
+            p.varps().varbit(Varbit.XP_DROPS_COUNTER, 2);
+            p.message("xpdrop off.");
+        });
+
+        put(Privilege.ADMIN, "loopvarbit", (p, args) -> {
+            for(int i =0; i < 10000; i ++) {
+                p.varps().varbit(i, 1);
+            }
+        });
+
+        put(Privilege.ADMIN, "loopvarp", (p, args) -> {
+            for(int i =0; i < 5000; i ++) {
+                p.varps().varp(i, 1);
+            }
+        });
+
         put(Privilege.ADMIN, "interdia", (p, args) -> {
             int interfaceId = 140;
             int positionId = 1;
             final int parentInterfaceId = 162;
-            for(int i = 0; i < 7; i++) {
+            for (int i = 0; i < 7; i++) {
                 p.write(new InterfaceText(interfaceId, i, "Test"));
             }
             p.interfaces().send(interfaceId, 162, 546, false); // chatbox

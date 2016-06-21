@@ -47,7 +47,7 @@ public class ButtonAction implements Action {
 
         new ButtonClickAction(player, interfaceId, buttonId, slot - 1, option).handleButtonClick();
 
-        //player.world().server().scriptRepository().triggerButton(player, hash >> 16, hash & 0xFFFF, slot, option + 1);
+       // player.world().server().scriptRepository().triggerButton(player, hash >> 16, hash & 0xFFFF, slot, option + 1);
 
     }
 }

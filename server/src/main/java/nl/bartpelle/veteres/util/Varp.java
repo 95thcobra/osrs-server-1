@@ -18,4 +18,8 @@ public class Varp {
 	public static final int REGICIDE_STATE = 328;
 	public static final int AREA_VOLUME = 872;
 
+	////
+
+	public static final int PRAYER_ORB = 375;
+
 }

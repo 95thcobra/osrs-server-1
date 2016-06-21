@@ -1,6 +1,7 @@
 package nl.bartpelle.veteres.aquickaccess.dialogue;
 
 import nl.bartpelle.veteres.model.entity.Player;
+import nl.bartpelle.veteres.model.entity.player.Privilege;
 
 /**
  * Created by Sky on 21-6-2016.
@@ -18,7 +19,9 @@ public class DialogueAction {
             // Spellbook altar
             case 2:
                 player.message("Change spellbook....");
-
+                player.varps().varbit(4070, 1); // ancients
+                player.varps().varbit(4070, 0); // Modern
+                player.varps().varbit(4070, 2); // Lunar
                 break;
         }
     }

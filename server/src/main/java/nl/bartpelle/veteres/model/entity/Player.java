@@ -101,6 +101,16 @@ public class Player extends Entity {
         return dialogueAction;
     }
 
+    private boolean isXPCounterEnabled = true;
+
+    public boolean isXPCounterEnabled() {
+        return isXPCounterEnabled;
+    }
+
+    public void setXPCounterEnabled(boolean XPCounterEnabled) {
+        isXPCounterEnabled = XPCounterEnabled;
+    }
+
     public void setDialogueAction(int dialogueAction) {
         this.dialogueAction = dialogueAction;
     }
