@@ -13,7 +13,15 @@ public class InvokeScript implements Command {
 	private String types;
 	private int size;
 
+
+	private String lol;
+
 	public InvokeScript(int id, Object... args) {
+		String lol = "invokescript sent: id:"+id;
+		for (int i = 0; i < args.length; i++) {
+			lol += " i:"+args[i].toString()+", ";
+		}
+
 		this.id = id;
 		this.args = args;
 
@@ -30,6 +38,9 @@ public class InvokeScript implements Command {
 
 	@Override
 	public RSBuffer encode(Player player) {
+		player.message("scriptinvoke:");
+		player.message(lol);
+
 		RSBuffer buf = new RSBuffer(player.channel().alloc().buffer(size));
 
 		buf.packet(154).writeSize(RSBuffer.SizeType.SHORT);

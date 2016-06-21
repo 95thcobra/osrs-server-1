@@ -10,6 +10,7 @@ import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.entity.player.Privilege;
 import nl.bartpelle.veteres.model.entity.player.Skills;
+import nl.bartpelle.veteres.aquickaccess.dialogue.DialogueHandler;
 import nl.bartpelle.veteres.model.item.Item;
 import nl.bartpelle.veteres.net.message.game.*;
 
@@ -84,7 +85,7 @@ public final class GameCommands {
         put(Privilege.ADMIN, "loopinter", (p, args) -> {
             new Thread(() -> {
                 int interfaceId = 0;
-                while (interfaceId++ < 750) {
+                while (interfaceId++ < 594) {
                     p.interfaces().sendMain(interfaceId, false);
                     p.message("Interface: " + interfaceId);
                     System.out.println("Interface: " + interfaceId);
@@ -97,13 +98,18 @@ public final class GameCommands {
             }).start();
         });
 
+        put(Privilege.ADMIN, "testdia", (p, args) -> {
+            new DialogueHandler().sendOptionDialogue(p, "Where would you like to teleport to?", "Edgeville", "Varrock", "Falador");
+        });
+
         put(Privilege.ADMIN, "interdia", (p, args) -> {
-            int interfaceId = 72;
-            int positionId = 0;
-            while (positionId++ < 200) {
-                p.interfaces().send(interfaceId, 548, positionId, false); // chatbox
-                System.out.println("pos id: " + positionId);
+            int interfaceId = 140;
+            int positionId = 1;
+            final int parentInterfaceId = 162;
+            for(int i = 0; i < 7; i++) {
+                p.write(new InterfaceText(interfaceId, i, "Test"));
             }
+            p.interfaces().send(interfaceId, 162, 546, false); // chatbox
         });
 
         put(Privilege.ADMIN, "loopinterpos", (p, args) -> {

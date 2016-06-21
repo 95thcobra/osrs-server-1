@@ -1,14 +1,13 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
-import nl.bartpelle.veteres.content.combat.PlayerCombat;
+import nl.bartpelle.veteres.aquickaccess.NpcClick1Action;
+import nl.bartpelle.veteres.aquickaccess.events.ClickNpcEvent;
+import nl.bartpelle.veteres.event.Event;
+import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.io.RSBuffer;
-import nl.bartpelle.veteres.model.AttributeKey;
-import nl.bartpelle.veteres.model.World;
 import nl.bartpelle.veteres.model.entity.Npc;
-import nl.bartpelle.veteres.model.entity.PathQueue;
 import nl.bartpelle.veteres.model.entity.Player;
-import nl.bartpelle.veteres.model.entity.player.Privilege;
 import nl.bartpelle.veteres.net.message.game.Action;
 import nl.bartpelle.veteres.net.message.game.PacketInfo;
 
@@ -50,7 +49,10 @@ public class NpcAction1 implements Action {
                 player.face(other);
 
 
-                handleNpcFirstClick(player, npcId);
+               // player.tile().distance(other.tile()) <= 2
+                 player.world().getEventHandler().addEvent(player, new ClickNpcEvent(player, other));
+
+                //handleNpcFirstClick(player, npcId);
 
 
                 //player.putattrib(AttributeKey.TARGET_TYPE, 1);
@@ -61,16 +63,19 @@ public class NpcAction1 implements Action {
     }
 
     private void handleNpcFirstClick(Player player, int npcId) {
-        switch (npcId) {
+       // new NpcClick1Action().handleNpcClick(player, npcId);
+       /* switch (npcId) {
 
             case 4400:
                 // Wizard edgeville TODO: find options interface
-                final int interfaceId = 72;
+                final int interfaceId = 140;
                 final int parentInterfaceId = 162;
                 final int positionId = 546;
+
+                //player.se
                 player.interfaces().send(interfaceId, parentInterfaceId, positionId, false);
                 break;
 
-        }
+        }*/
     }
 }

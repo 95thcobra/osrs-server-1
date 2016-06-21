@@ -26,8 +26,16 @@ public class EventHandler {
         this.events = new ArrayList<EventContainer>();
     }
 
+    public void addEvent(Player player, Event event) {
+        this.events.add(new EventContainer(player, 0, event));
+    }
+
     public void addEvent(Player player, int ticks, Event event) {
         this.events.add(new EventContainer(player, ticks, event));
+    }
+
+    public void addEvent(EventContainer event) {
+        events.add(event);
     }
 
     public void process() {
@@ -36,6 +44,7 @@ public class EventHandler {
         for (EventContainer c : eventsCopy) {
             if (c != null) {
                 if (c.needsExecution())
+
                     c.execute();
                 if (!c.isRunning()) {
                     remove.add(c);

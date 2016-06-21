@@ -20,6 +20,8 @@ public class SetPlayerOption implements Command {
 
 	@Override
 	public RSBuffer encode(Player player) {
+		//player.message("setplayeroption sent: slot:"+slot+" top:"+top+" option:"+option);
+
 		RSBuffer buffer = new RSBuffer(player.channel().alloc().buffer(1 + 1 + 1 + option.length() + 1 + 1));
 
 		buffer.packet(133).writeSize(RSBuffer.SizeType.BYTE);

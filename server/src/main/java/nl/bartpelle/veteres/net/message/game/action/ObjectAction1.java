@@ -1,6 +1,8 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
+import nl.bartpelle.veteres.aquickaccess.ObjectClick1Action;
+import nl.bartpelle.veteres.aquickaccess.events.ClickObjectEvent;
 import nl.bartpelle.veteres.content.mechanics.ObjectInteraction;
 import nl.bartpelle.veteres.event.Event;
 import nl.bartpelle.veteres.event.EventContainer;
@@ -54,23 +56,16 @@ public class ObjectAction1 implements Action {
             player.putattrib(AttributeKey.INTERACTION_OBJECT, obj);
             player.putattrib(AttributeKey.INTERACTION_OPTION, 1);
 
-            // player.world().server().scriptExecutor().executeScript(player, ObjectInteraction.script);
-
-            // Execute groovy plugin
-            // player.world().getPluginHandler().execute(player, ObjectFirstClickPlugin.class, new ObjectFirstClickPlugin(id, new Tile(x, z)));
-
             player.walkTo(obj, PathQueue.StepType.REGULAR);
             player.faceObj(obj);
 
-            PathQueue.Step step = player.pathQueue().peekLast();
 
-            Tile lastTile;
-            if (step == null)
-                lastTile = player.tile();
-            else
-                lastTile = player.pathQueue().peekLast().toTile();
+            Tile targetTile = player.pathQueue().getTargetTile();
+            player.world().getEventHandler().addEvent(player, new ClickObjectEvent(player, obj, targetTile));
 
-            player.world().getEventHandler().addEvent(player, 1, new Event() {
+
+
+            /*player.world().getEventHandler().addEvent(player, 1, new Event() {
                 @Override
                 public void execute(EventContainer container) {
                     if (player.tile().equals(lastTile)) {
@@ -82,7 +77,7 @@ public class ObjectAction1 implements Action {
                 public void stop() {
                     handleObject(player, obj);
                 }
-            });
+            });*/
         }
     }
 

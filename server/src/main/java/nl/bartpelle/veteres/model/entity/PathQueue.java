@@ -123,6 +123,21 @@ public class PathQueue {
 		return lastStep;
 	}
 
+	/**
+	 * Gets the tile the entity is walking to. idk if this is good
+	 * @author Simon
+	 * @return
+     */
+	public Tile getTargetTile() {
+		PathQueue.Step step = entity.pathQueue().peekLast();
+		Tile lastTile;
+		if (step == null)
+			lastTile = entity.tile();
+		else
+			lastTile = entity.pathQueue().peekLast().toTile();
+		return lastTile;
+	}
+
 	public void running(boolean b) {
 		running = b;
 	}

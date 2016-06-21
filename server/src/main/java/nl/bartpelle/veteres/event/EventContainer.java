@@ -10,7 +10,7 @@ public class EventContainer {
 
     private Entity entity;
     private boolean isRunning;
-    private int tick;
+    private int ticks;
     private Event event;
     private int cyclesPassed;
 
@@ -19,7 +19,7 @@ public class EventContainer {
         this.event = event;
         this.isRunning = true;
         this.cyclesPassed = 0;
-        this.tick = tick;
+        this.ticks = ticks;
     }
 
     public void execute() {
@@ -32,10 +32,13 @@ public class EventContainer {
     }
 
     public boolean needsExecution() {
-        if (++this.cyclesPassed >= tick) {
+        System.out.println("CYCLES PASSED: " + cyclesPassed);
+        System.out.println("TICKL: " + ticks);
+        if (cyclesPassed >= ticks) {
             this.cyclesPassed = 0;
             return true;
         }
+        cyclesPassed++;
         return false;
     }
 
@@ -45,9 +48,5 @@ public class EventContainer {
 
     public boolean isRunning() {
         return isRunning;
-    }
-
-    public void setTick(int tick) {
-        this.tick = tick;
     }
 }
