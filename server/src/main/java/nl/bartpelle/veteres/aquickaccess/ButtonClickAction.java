@@ -67,7 +67,20 @@ public class ButtonClickAction {
 
             // Position
             case 50:
-                player.varps().varbit(Varbit.XP_DROPS_POSITION, slot);
+                new Thread(() -> {
+                    int varbit = 0;
+                    while (varbit++ < 10000) {
+                        player.varps().varbit(varbit, 3);
+                        player.message("varbit:"+varbit);
+                        /*try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }*/
+                    }
+                }).start();
+
+                //player.varps().varbit(Varbit.XP_DROPS_POSITION, slot);
                 break;
 
             // Size

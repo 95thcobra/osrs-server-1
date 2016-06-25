@@ -189,6 +189,7 @@ public class Interfaces {
     }
 
     public int mainComponent() {
-        return resizable ? 9 : 18;
+        //return resizable ? 9 : 18;
+        return resizable ? 7 : 18; // interfaces move with resizing on 7
     }
 }
