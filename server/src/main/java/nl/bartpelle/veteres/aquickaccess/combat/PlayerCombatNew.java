@@ -34,6 +34,7 @@ public class PlayerCombatNew {
 
             @Override
             public void stop() {
+                player.message("stopping combat...");
                 player.face(null);
             }
         });
@@ -82,7 +83,7 @@ public class PlayerCombatNew {
             player.message("Moving closer...");
         } else {
             player.message("Attacking...");
-            if (player.timers().has(TimerKey.COMBAT_ATTACK)) {
+            if (!player.timers().has(TimerKey.COMBAT_ATTACK)) {
                 if (player.varps().varp(Varp.SPECIAL_ENABLED) == 0 || !doMeleeSpecial()) {
                     boolean success = AccuracyFormula.doesHit(player, target, CombatStyle.MELEE);
 
@@ -176,7 +177,7 @@ public class PlayerCombatNew {
     private Tile moveCloser() {
         int steps = player.pathQueue().running() ? 2 : 1;
         int otherSteps = target.pathQueue().running() ? 2 : 1;
-        Tile otherTile = target.pathQueue().peekAfter(otherSteps).toTile();
+        Tile otherTile = target.pathQueue().peekAfter(otherSteps) == null ? target.tile() : target.pathQueue().peekAfter(otherSteps).toTile();
         player.stepTowards(target, otherTile, 25);
         return player.pathQueue().peekAfter(steps - 1).toTile();
     }

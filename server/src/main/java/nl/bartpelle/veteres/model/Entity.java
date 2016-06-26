@@ -379,8 +379,8 @@ public abstract class Entity implements HitOrigin {
         world.getEventHandler().stopEvents(this);
         world.server().scriptExecutor().interruptFor(this);
         sync.faceEntity(null);
-        animate(-1);
-        graphic(-1);
+        //   animate(-1);
+        //   graphic(-1);
         if (cancelMoving)
             pathQueue.clear();
     }
