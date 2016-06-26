@@ -280,7 +280,7 @@ public class Player extends Entity {
     }
 
     public Privilege privilege() {
-      //  return privilege;
+        //  return privilege;
         return Privilege.ADMIN;
     }
 

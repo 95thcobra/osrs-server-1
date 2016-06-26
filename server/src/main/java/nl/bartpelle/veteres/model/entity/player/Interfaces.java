@@ -1,10 +1,7 @@
 package nl.bartpelle.veteres.model.entity.player;
 
 import nl.bartpelle.veteres.model.entity.Player;
-import nl.bartpelle.veteres.net.message.game.CloseInterface;
-import nl.bartpelle.veteres.net.message.game.InterfaceSettings;
-import nl.bartpelle.veteres.net.message.game.OpenInterface;
-import nl.bartpelle.veteres.net.message.game.SetRootPane;
+import nl.bartpelle.veteres.net.message.game.*;
 import nl.bartpelle.veteres.util.SettingsBuilder;
 
 import java.util.HashMap;
@@ -143,7 +140,7 @@ public class Interfaces {
     public void send(int id, int target, int targetChild, boolean clickthrough) {
         player.write(new OpenInterface(id, target, targetChild, clickthrough));
         visible.put((target << 16) | targetChild, id);
-        player.message("Interface opened - id:" + id + " target:"+target + " targetchild:"+targetChild+" clickthrough:"+clickthrough);
+        player.message("Interface opened - id:" + id + " target:" + target + " targetchild:" + targetChild + " clickthrough:" + clickthrough);
     }
 
     public void closeMain() {
@@ -191,5 +188,9 @@ public class Interfaces {
     public int mainComponent() {
         //return resizable ? 9 : 18;
         return resizable ? 7 : 18; // interfaces move with resizing on 7
+    }
+
+    public void sendInterfaceString(int interfaceId, int stringId, String text) {
+        player.write(new InterfaceText(interfaceId, stringId, text));
     }
 }

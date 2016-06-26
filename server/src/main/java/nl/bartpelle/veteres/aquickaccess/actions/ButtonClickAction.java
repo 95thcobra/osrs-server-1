@@ -58,10 +58,53 @@ public class ButtonClickAction {
             case 218:
                 handleSpellBook();
                 break;
+
+            // Options: equipment stats, etc.
+            case 387:
+                handleOptionsTabs();
+                break;
+
+            // Combat style switching
+            case 593:
+                handleCombatStyleSwitch();
+                break;
         }
     }
 
     ////////////////
+
+    private void handleOptionsTabs() {
+        switch(buttonId) {
+
+            // Equipment stats
+            case 17:
+                player.interfaces().sendMain(84);
+                player.equipment().refreshEquipmentStatsInterface(player);
+                break;
+
+            // Items on death
+            case 21:
+                player.interfaces().sendMain(102);
+                break;
+        }
+    }
+
+    private void handleCombatStyleSwitch() {
+        switch (buttonId) {
+            case 3:
+                player.varps().varp(Varp.ATTACK_STYLE, 0);
+                break;
+            case 7:
+                player.varps().varp(Varp.ATTACK_STYLE, 1);
+                break;
+            case 11:
+                player.varps().varp(Varp.ATTACK_STYLE, 2);
+                break;
+            case 15:
+                player.varps().varp(Varp.ATTACK_STYLE, 3);
+                break;
+        }
+    }
 
     private void XPDropToggles() {
         switch (buttonId) {
