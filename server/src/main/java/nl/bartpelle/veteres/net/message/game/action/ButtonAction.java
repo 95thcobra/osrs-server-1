@@ -1,11 +1,9 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
-import nl.bartpelle.veteres.aquickaccess.ButtonClickAction;
+import nl.bartpelle.veteres.aquickaccess.actions.ButtonClickAction;
 import nl.bartpelle.veteres.io.RSBuffer;
-import nl.bartpelle.veteres.model.AttributeKey;
 import nl.bartpelle.veteres.model.entity.Player;
-import nl.bartpelle.veteres.model.entity.player.Privilege;
 import nl.bartpelle.veteres.net.message.game.Action;
 import nl.bartpelle.veteres.net.message.game.PacketInfo;
 

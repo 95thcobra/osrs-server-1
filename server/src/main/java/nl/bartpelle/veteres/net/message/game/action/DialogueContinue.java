@@ -44,7 +44,7 @@ public class DialogueContinue implements Action {
 
 
 	player.message("Dialogue action: id:"+id+" child:"+child + " returnval:"+returnval);
-		new DialogueAction().handleDialog(player, returnval);
+		new DialogueAction(player, returnval).handleDialog();
 		//player.world().server().scriptExecutor().continueFor(player, WaitReason.DIALOGUE, returnval);
 	}
 }

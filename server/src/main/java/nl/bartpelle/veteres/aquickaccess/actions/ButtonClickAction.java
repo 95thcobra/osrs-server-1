@@ -1,5 +1,6 @@
-package nl.bartpelle.veteres.aquickaccess;
+package nl.bartpelle.veteres.aquickaccess.actions;
 
+import nl.bartpelle.veteres.aquickaccess.Coordinates;
 import nl.bartpelle.veteres.model.Tile;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.InvokeScript;
@@ -67,20 +68,7 @@ public class ButtonClickAction {
 
             // Position
             case 50:
-                new Thread(() -> {
-                    int varbit = 0;
-                    while (varbit++ < 10000) {
-                        player.varps().varbit(varbit, 3);
-                        player.message("varbit:"+varbit);
-                        /*try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*/
-                    }
-                }).start();
-
-                //player.varps().varbit(Varbit.XP_DROPS_POSITION, slot);
+                player.varps().varbit(Varbit.XP_DROPS_POSITION, slot);
                 break;
 
             // Size

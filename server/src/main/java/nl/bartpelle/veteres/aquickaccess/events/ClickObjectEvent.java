@@ -1,11 +1,9 @@
 package nl.bartpelle.veteres.aquickaccess.events;
 
-import nl.bartpelle.veteres.aquickaccess.NpcClick1Action;
-import nl.bartpelle.veteres.aquickaccess.ObjectClick1Action;
+import nl.bartpelle.veteres.aquickaccess.actions.ObjectClick1Action;
 import nl.bartpelle.veteres.event.Event;
 import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.model.Tile;
-import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.map.MapObj;
 

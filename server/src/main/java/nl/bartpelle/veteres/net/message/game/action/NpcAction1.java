@@ -1,10 +1,7 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
-import nl.bartpelle.veteres.aquickaccess.NpcClick1Action;
 import nl.bartpelle.veteres.aquickaccess.events.ClickNpcEvent;
-import nl.bartpelle.veteres.event.Event;
-import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.io.RSBuffer;
 import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.Player;
@@ -56,7 +53,7 @@ public class NpcAction1 implements Action {
 
                 //player.putattrib(AttributeKey.TARGET_TYPE, 1);
                 //player.putattrib(AttributeKey.TARGET, index);
-                //player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
+                //player.world().server().scriptExecutor().executeScript(player, PlayerCombatNew.script);
             }
         }
     }

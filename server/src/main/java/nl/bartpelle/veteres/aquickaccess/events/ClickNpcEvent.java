@@ -1,6 +1,6 @@
 package nl.bartpelle.veteres.aquickaccess.events;
 
-import nl.bartpelle.veteres.aquickaccess.NpcClick1Action;
+import nl.bartpelle.veteres.aquickaccess.actions.NpcClick1Action;
 import nl.bartpelle.veteres.event.Event;
 import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.model.entity.Npc;

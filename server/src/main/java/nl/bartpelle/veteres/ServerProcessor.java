@@ -75,7 +75,6 @@ public class ServerProcessor extends Thread {
 		tasks.add(new PlayerProcessingTask());
 		tasks.add(new NpcProcessingTask());
 		tasks.add(new ScriptProcessingTask());
-
 		tasks.add(new PlayerPreSyncTask());
 		tasks.add(new NpcPreSyncTask());
 		tasks.add(new NpcViewportTask());

@@ -1,4 +1,4 @@
-package nl.bartpelle.veteres.aquickaccess;
+package nl.bartpelle.veteres.aquickaccess.actions;
 
 /**
  * Created by Sky on 21-6-2016.

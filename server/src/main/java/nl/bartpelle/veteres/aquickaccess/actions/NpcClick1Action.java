@@ -1,4 +1,4 @@
-package nl.bartpelle.veteres.aquickaccess;
+package nl.bartpelle.veteres.aquickaccess.actions;
 
 import nl.bartpelle.veteres.aquickaccess.dialogue.DialogueHandler;
 import nl.bartpelle.veteres.model.entity.Player;
