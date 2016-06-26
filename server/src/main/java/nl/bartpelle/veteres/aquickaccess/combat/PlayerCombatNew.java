@@ -27,8 +27,14 @@ public class PlayerCombatNew {
 
     public void attackPlayer() {
         player.world().getEventHandler().addEvent(player, new Event() {
+            private boolean stop = false;
+
             @Override
             public void execute(EventContainer container) {
+                if (stop) {
+                    container.stop();
+                    return;
+                }
                 cycle();
             }
 
@@ -36,6 +42,7 @@ public class PlayerCombatNew {
             public void stop() {
                 player.message("stopping combat...");
                 player.face(null);
+                boolean stop = true;
             }
         });
     }
@@ -43,8 +50,6 @@ public class PlayerCombatNew {
     public void cycle() {
         player.message("attacking " + target.name());
         target.message("getting attacked by " + player.name());
-
-        player.face(target);
 
         // player.pathQueue().clear();
         Tile currentTile = player.tile();

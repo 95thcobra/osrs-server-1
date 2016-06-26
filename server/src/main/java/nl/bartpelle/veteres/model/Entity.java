@@ -376,6 +376,7 @@ public abstract class Entity implements HitOrigin {
     }
 
     public void stopActions(boolean cancelMoving) {
+        this.message("stopping actions...");
         world.getEventHandler().stopEvents(this);
         world.server().scriptExecutor().interruptFor(this);
         sync.faceEntity(null);
