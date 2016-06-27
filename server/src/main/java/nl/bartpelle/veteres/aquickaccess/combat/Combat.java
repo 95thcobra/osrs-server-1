@@ -39,10 +39,13 @@ public abstract class Combat {
     public abstract void cycle();
 
     public Tile moveCloser() {
+        entity.pathQueue().clear();
+
         int steps = entity.pathQueue().running() ? 2 : 1;
         int otherSteps = target.pathQueue().running() ? 2 : 1;
+
         Tile otherTile = target.pathQueue().peekAfter(otherSteps) == null ? target.tile() : target.pathQueue().peekAfter(otherSteps).toTile();
         entity.stepTowards(target, otherTile, 25);
-        return entity.pathQueue().peekAfter(steps - 1).toTile();
+        return entity.pathQueue().peekAfter(steps - 1) == null ? entity.tile() : entity.pathQueue().peekAfter(steps - 1).toTile();
     }
 }

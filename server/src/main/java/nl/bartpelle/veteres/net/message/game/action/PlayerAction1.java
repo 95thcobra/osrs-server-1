@@ -48,8 +48,9 @@ public class PlayerAction1 implements Action {
                 player.putattrib(AttributeKey.TARGET_TYPE, 0);
                 player.putattrib(AttributeKey.TARGET, index);
 
-                //player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
+              // player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
                 new PlayerCombatNew(player, other).start();
+               // new CombatBuilder().start();
             }
         }
     }

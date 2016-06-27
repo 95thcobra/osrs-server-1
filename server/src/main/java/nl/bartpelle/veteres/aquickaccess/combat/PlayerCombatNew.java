@@ -3,6 +3,7 @@ package nl.bartpelle.veteres.aquickaccess.combat;
 import nl.bartpelle.veteres.event.Event;
 import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.model.*;
+import nl.bartpelle.veteres.model.entity.PathQueue;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.entity.player.EquipSlot;
 import nl.bartpelle.veteres.model.entity.player.WeaponType;
@@ -19,61 +20,62 @@ public class PlayerCombatNew extends Combat {
 
     public PlayerCombatNew(Player player, Player target) {
         super(player, target);
+        this.player = player;
+        this.target = target;
     }
 
     public void cycle() {
-        player.message("attacking " + target.name());
-        target.message("getting attacked by " + player.name());
-
         // Get weapon data.
-        Item weapon = player.equipment().get(EquipSlot.WEAPON);
+        Item weapon = ((Player) getEntity()).equipment().get(EquipSlot.WEAPON);
         int weaponId = weapon == null ? -1 : weapon.id();
-        int weaponType = player.world().equipmentInfo().weaponType(weaponId);
-        Item ammo = player.equipment().get(EquipSlot.AMMO);
+        int weaponType = getEntity().world().equipmentInfo().weaponType(weaponId);
+        Item ammo = ((Player) getEntity()).equipment().get(EquipSlot.AMMO);
         int ammoId = ammo == null ? -1 : ammo.id();
-        String ammoName = ammo == null ? "" : ammo.definition(player.world()).name;
+        String ammoName = ammo == null ? "" : ammo.definition(getEntity().world()).name;
 
         // Check if players are in wilderness.
-        if (!player.inWilderness() || !target.inWilderness()) {
+        if (!((Player) getEntity()).inWilderness() || !((Player) getTarget()).inWilderness()) {
             // stop();
             return;
         }
 
         // Combat type?
         if (weaponType == WeaponType.BOW || weaponType == WeaponType.CROSSBOW || weaponType == WeaponType.THROWN) {
-            player.message("ranging...");
+            getEntity().message("ranging...");
             handleRangeCombat(weaponId, ammoName, weaponType);
         } else {
-            player.message("meleeeing...");
-            handleMeleeCombat(weaponId);
+            getEntity().message("meleeeing...");
+            handleMeleeCombat( weaponId);
         }
 
-        target.putattrib(AttributeKey.LAST_DAMAGER, player);
-        target.putattrib(AttributeKey.LAST_DAMAGE, System.currentTimeMillis());
+        getTarget().putattrib(AttributeKey.LAST_DAMAGER, getEntity());
+        getTarget().putattrib(AttributeKey.LAST_DAMAGE, System.currentTimeMillis());
     }
 
-    private void handleMeleeCombat(int weaponId) {
-        Tile currentTile = player.tile();
-        if (!player.touches(target, currentTile) && !player.frozen() && !player.stunned()) {
+    private void handleMeleeCombat( int weaponId) {
+        Tile currentTile = getEntity().tile();
+        if (!getEntity().touches(getTarget(), currentTile) && !getEntity().frozen() && !getEntity().stunned()) {
             currentTile = moveCloser();
-            player.message("Moving closer...");
-        } else {
-            player.message("Attacking...");
-            if (!player.timers().has(TimerKey.COMBAT_ATTACK)) {
-                if (player.varps().varp(Varp.SPECIAL_ENABLED) == 0 || !doMeleeSpecial()) {
-                    boolean success = AccuracyFormula.doesHit(player, target, CombatStyle.MELEE);
+            getEntity().message("Moving closer...");
+        }
 
-                    int max = CombatFormula.maximumMeleeHit(player);
-                    int hit = player.world().random(max);
+        if (getEntity().touches(getTarget(), currentTile)) {
+            getEntity().message("Attacking...");
+            if (!getEntity().timers().has(TimerKey.COMBAT_ATTACK)) {
+                if (((Player) getEntity()).varps().varp(Varp.SPECIAL_ENABLED) == 0 || !doMeleeSpecial()) {
+                    boolean success = AccuracyFormula.doesHit(((Player) getEntity()), getTarget(), CombatStyle.MELEE);
 
-                    target.hit(player, success ? hit : 0);
+                    int max = CombatFormula.maximumMeleeHit(((Player) getEntity()));
+                    int hit = getEntity().world().random(max);
 
-                    player.animate(EquipmentInfo.attackAnimationFor(player));
-                    player.timers().register(TimerKey.COMBAT_ATTACK, player.world().equipmentInfo().weaponSpeed(weaponId));
+                    getTarget().hit(getEntity(), success ? hit : 0);
+
+                    getEntity().animate(EquipmentInfo.attackAnimationFor(((Player) getEntity())));
+                    getEntity().timers().register(TimerKey.COMBAT_ATTACK, getEntity().world().equipmentInfo().weaponSpeed(weaponId));
 
 
                 }
-                player.varps().varp(Varp.SPECIAL_ENABLED, 0);
+                ((Player) getEntity()).varps().varp(Varp.SPECIAL_ENABLED, 0);
             }
         }
     }
@@ -153,7 +155,7 @@ public class PlayerCombatNew extends Combat {
     }
 
     private boolean doRangeSpecial() {
-        int weaponId = player.equipment().get(EquipSlot.WEAPON).id();
+        int weaponId = ((Player) getEntity()).equipment().get(EquipSlot.WEAPON).id();
 
         switch (weaponId) {
             case 861:
