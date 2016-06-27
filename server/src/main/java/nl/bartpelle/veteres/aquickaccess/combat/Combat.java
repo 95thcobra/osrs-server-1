@@ -31,12 +31,18 @@ public abstract class Combat {
         entity.world().getEventHandler().addEvent(entity, new Event() {
             @Override
             public void execute(EventContainer container) {
+                if (target.dead() || target.locked()) {
+                    container.stop();
+                    return;
+                }
                 cycle();
             }
         });
     }
 
     public abstract void cycle();
+
+
 
     public Tile moveCloser() {
         entity.pathQueue().clear();

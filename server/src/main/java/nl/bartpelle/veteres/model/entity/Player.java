@@ -2,6 +2,7 @@ package nl.bartpelle.veteres.model.entity;
 
 import com.google.common.base.MoreObjects;
 import io.netty.channel.Channel;
+import nl.bartpelle.veteres.aquickaccess.events.PlayerDeathEvent;
 import nl.bartpelle.veteres.aquickaccess.events.TeleportEvent;
 import nl.bartpelle.veteres.content.mechanics.Death;
 import nl.bartpelle.veteres.crypto.IsaacRand;
@@ -481,8 +482,9 @@ public class Player extends Entity {
 
     @Override
     protected void die() {
-        lock();
-        world.server().scriptExecutor().executeScript(this, Death.script);
+       // lock();
+        world.getEventHandler().addEvent(this, new PlayerDeathEvent(this));
+        //world.server().scriptExecutor().executeScript(this, Death.script);
     }
 
     public void write(Object... o) {

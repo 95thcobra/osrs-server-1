@@ -1,15 +1,12 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
-import nl.bartpelle.veteres.aquickaccess.combat.PlayerCombatNew;
-import nl.bartpelle.veteres.content.combat.PlayerCombat;
+import nl.bartpelle.veteres.aquickaccess.combat.PvPCombat;
 import nl.bartpelle.veteres.io.RSBuffer;
 import nl.bartpelle.veteres.model.AttributeKey;
-import nl.bartpelle.veteres.model.Tile;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.Action;
 import nl.bartpelle.veteres.net.message.game.PacketInfo;
-import nl.bartpelle.veteres.script.TimerKey;
 
 /**
  * Created by Bart on 8/12/2015.
@@ -49,7 +46,7 @@ public class PlayerAction1 implements Action {
                 player.putattrib(AttributeKey.TARGET, index);
 
               // player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
-                new PlayerCombatNew(player, other).start();
+                new PvPCombat(player, other).start();
                // new CombatBuilder().start();
             }
         }

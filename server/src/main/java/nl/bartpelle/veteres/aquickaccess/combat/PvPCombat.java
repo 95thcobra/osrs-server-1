@@ -14,11 +14,11 @@ import nl.bartpelle.veteres.util.*;
 /**
  * Created by Sky on 25-6-2016.
  */
-public class PlayerCombatNew extends Combat {
+public class PvPCombat extends Combat {
     private Player player;
     private Player target;
 
-    public PlayerCombatNew(Player player, Player target) {
+    public PvPCombat(Player player, Player target) {
         super(player, target);
         this.player = player;
         this.target = target;

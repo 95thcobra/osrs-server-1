@@ -1,7 +1,6 @@
 package nl.bartpelle.veteres.aquickaccess.actions;
 
-import nl.bartpelle.veteres.aquickaccess.Coordinates;
-import nl.bartpelle.veteres.model.Tile;
+import nl.bartpelle.veteres.aquickaccess.Locations;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.InvokeScript;
 import nl.bartpelle.veteres.util.SettingsBuilder;
@@ -184,7 +183,7 @@ public class ButtonClickAction {
             // Varrock teleport
             case 16:
                 player.message("Teleporting to varrock.");
-                player.teleportWithAnimation(Coordinates.VARROCK.getTile());
+                player.teleportWithAnimation(Locations.VARROCK.getTile());
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package nl.bartpelle.veteres.model.entity;
 
+import nl.bartpelle.veteres.aquickaccess.events.NpcDeathEvent;
 import nl.bartpelle.veteres.fs.NpcDefinition;
 import nl.bartpelle.veteres.model.*;
 import nl.bartpelle.veteres.model.entity.player.NpcSyncInfo;
@@ -111,7 +112,6 @@ public class Npc extends Entity {
 
     @Override
     protected void die() {
-        // TODO
+        world.getEventHandler().addEvent(this, new NpcDeathEvent(this));
     }
-
 }

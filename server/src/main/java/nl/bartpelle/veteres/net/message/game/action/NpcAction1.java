@@ -53,7 +53,7 @@ public class NpcAction1 implements Action {
 
                 //player.putattrib(AttributeKey.TARGET_TYPE, 1);
                 //player.putattrib(AttributeKey.TARGET, index);
-                //player.world().server().scriptExecutor().executeScript(player, PlayerCombatNew.script);
+                //player.world().server().scriptExecutor().executeScript(player, PvPCombat.script);
             }
         }
     }
