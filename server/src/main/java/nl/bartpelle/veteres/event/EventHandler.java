@@ -26,12 +26,12 @@ public class EventHandler {
         this.events = new ArrayList<EventContainer>();
     }
 
-    public void addEvent(Player player, Event event) {
-        addEvent(player, 0, event);
+    public void addEvent(Entity entity, Event event) {
+        addEvent(entity, 0, event);
     }
 
-    public void addEvent(Player player, int ticks, Event event) {
-        addEvent(new EventContainer(player, ticks, event));
+    public void addEvent(Entity entity, int ticks, Event event) {
+        addEvent(new EventContainer(entity, ticks, event));
     }
 
     public void addEvent(EventContainer event) {

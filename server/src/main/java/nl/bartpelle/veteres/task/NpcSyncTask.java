@@ -60,6 +60,14 @@ public class NpcSyncTask implements Task {
 				int mask = npcSync.calculatedFlag();
 				buffer.writeByte(mask);
 
+				// this dont work/
+				if (npcSync.hasFlag(NpcSyncInfo.Flag.HIT.value)) {
+					buffer.get().writeBytes(npcSync.getHitSetNPC());
+				}
+
+				//player.message("SENDING NPC TASK:");
+				//player.message(npcSync.hitSet().toString());
+
 				if (npcSync.hasFlag(NpcSyncInfo.Flag.GRAPHIC.value))
 					buffer.get().writeBytes(npcSync.graphicSet());
 				if (npcSync.hasFlag(NpcSyncInfo.Flag.ANIMATION.value))

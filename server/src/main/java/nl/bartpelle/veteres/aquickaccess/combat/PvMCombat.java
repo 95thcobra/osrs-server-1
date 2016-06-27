@@ -1,8 +1,9 @@
 package nl.bartpelle.veteres.aquickaccess.combat;
 
-import nl.bartpelle.veteres.event.Event;
-import nl.bartpelle.veteres.event.EventContainer;
-import nl.bartpelle.veteres.model.*;
+import nl.bartpelle.veteres.model.AttributeKey;
+import nl.bartpelle.veteres.model.Entity;
+import nl.bartpelle.veteres.model.Tile;
+import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.entity.player.EquipSlot;
 import nl.bartpelle.veteres.model.entity.player.WeaponType;
@@ -11,19 +12,23 @@ import nl.bartpelle.veteres.script.TimerKey;
 import nl.bartpelle.veteres.util.*;
 
 /**
- * Created by Sky on 25-6-2016.
+ * Created by Sky on 27-6-2016.
  */
-public class PlayerCombatNew extends Combat {
-    private Player player;
-    private Player target;
+public class PvMCombat extends Combat {
 
-    public PlayerCombatNew(Player player, Player target) {
+    private Player player;
+    private Npc target;
+
+    public PvMCombat(Player player, Npc target) {
         super(player, target);
+        this.player = player;
+        this.target = target;
     }
 
+    @Override
     public void cycle() {
-        player.message("attacking " + target.name());
-        target.message("getting attacked by " + player.name());
+        player.message("attacking " + target.def().name);
+      //  target.message("getting attacked by " + player.name());
 
         // Get weapon data.
         Item weapon = player.equipment().get(EquipSlot.WEAPON);
@@ -32,12 +37,6 @@ public class PlayerCombatNew extends Combat {
         Item ammo = player.equipment().get(EquipSlot.AMMO);
         int ammoId = ammo == null ? -1 : ammo.id();
         String ammoName = ammo == null ? "" : ammo.definition(player.world()).name;
-
-        // Check if players are in wilderness.
-        if (!player.inWilderness() || !target.inWilderness()) {
-            // stop();
-            return;
-        }
 
         // Combat type?
         if (weaponType == WeaponType.BOW || weaponType == WeaponType.CROSSBOW || weaponType == WeaponType.THROWN) {
@@ -51,6 +50,7 @@ public class PlayerCombatNew extends Combat {
         target.putattrib(AttributeKey.LAST_DAMAGER, player);
         target.putattrib(AttributeKey.LAST_DAMAGE, System.currentTimeMillis());
     }
+
 
     private void handleMeleeCombat(int weaponId) {
         Tile currentTile = player.tile();
@@ -66,18 +66,18 @@ public class PlayerCombatNew extends Combat {
                     int max = CombatFormula.maximumMeleeHit(player);
                     int hit = player.world().random(max);
 
-                    target.hit(player, success ? hit : 0);
+                    target.hit(player, success ? hit : 0); // this doesnt work
 
                     player.animate(EquipmentInfo.attackAnimationFor(player));
                     player.timers().register(TimerKey.COMBAT_ATTACK, player.world().equipmentInfo().weaponSpeed(weaponId));
-
-
                 }
                 player.varps().varp(Varp.SPECIAL_ENABLED, 0);
             }
         }
     }
-
+    private boolean doMeleeSpecial() {
+        return false;
+    }
     private void handleRangeCombat(int weaponId, String ammoName, int weaponType) {
         Tile currentTile = player.tile();
 
@@ -153,18 +153,6 @@ public class PlayerCombatNew extends Combat {
     }
 
     private boolean doRangeSpecial() {
-        int weaponId = player.equipment().get(EquipSlot.WEAPON).id();
-
-        switch (weaponId) {
-            case 861:
-
-                break;
-        }
-
-        return false;//TODO
-    }
-
-    private boolean doMeleeSpecial() {
         return false;
     }
 }

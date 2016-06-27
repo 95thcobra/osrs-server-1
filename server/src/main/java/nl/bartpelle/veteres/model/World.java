@@ -105,6 +105,7 @@ public class World {
                         npc.spawnDirection(sp.dir());
                         npc.walkRadius(sp.radius);
                         registerNpc(npc);
+                        System.out.println("NPC LOADED: " + npc.def().name);
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

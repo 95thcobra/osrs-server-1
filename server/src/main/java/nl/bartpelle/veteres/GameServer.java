@@ -115,7 +115,7 @@ public class GameServer {
 		MapDecryptionKeys.load(new File(config.getString("server.mapkeys")));
 		fileStore = new DataStore(store);
 		loadScripts();
-		loadGroovyPlugins();
+		//loadGroovyPlugins();
 		world = new World(this);
 		huffman = new HuffmanCodec(fileStore);
 	}
@@ -181,10 +181,10 @@ public class GameServer {
 		scriptRepository.load();
 	}
 
-	public void loadGroovyPlugins() {
+	/*public void loadGroovyPlugins() {
 		logger.log(Level.INFO, "Loading groovy plugins...");
 		World.getPluginHandler().init();
-	}
+	}*/
 
 	/**
 	 * Instantiate and setup any services that are provided through the configuration file.

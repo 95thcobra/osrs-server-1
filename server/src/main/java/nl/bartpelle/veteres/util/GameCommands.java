@@ -46,6 +46,15 @@ public final class GameCommands {
         });
 
 		/* Supervisor commands */
+        put(Privilege.ADMIN, "spawnandhit", (p, args) -> {
+            Npc npc = new Npc(Integer.parseInt(args[0]), p.world(), new Tile(p.tile().x + 1, p.tile().z));
+            p.world().registerNpc(npc);
+            npc.hit(p, 5);// NPC DOESNT  GET HIT
+
+            // This works but npc doesnt work.
+            p.hit(p, 0);
+        });
+
         put(Privilege.PLAYER, "reload", (p, args) -> commands = setup());
         put(Privilege.PLAYER, "refreshlooks", (p, args) -> p.looks().update());
         put(Privilege.ADMIN, "logout", (p, args) -> p.logout());

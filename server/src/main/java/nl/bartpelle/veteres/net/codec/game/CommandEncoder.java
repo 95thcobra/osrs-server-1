@@ -21,7 +21,7 @@ public class CommandEncoder extends MessageToByteEncoder<Command> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Command msg, ByteBuf out) throws Exception {
-		System.out.println("MESSAGE SENT: "+msg.toString());
+		//System.out.println("MESSAGE SENT: "+msg.toString());
 
 		Player player = ctx.channel().attr(ServerHandler.ATTRIB_PLAYER).get();
 		RSBuffer buffer = msg.encode(player);

@@ -17,6 +17,8 @@ public abstract class SyncInfo {
 	protected byte[] faceEntitySet = new byte[2];
 	protected byte[] hitSet = new byte[5];
 	protected byte[] hitSet2 = new byte[5];
+	protected byte[] hitSetNPC = new byte[6];
+	protected byte[] hitSet2NPC = new byte[6];
 	protected byte[] facetile = new byte[4];
 	protected byte[] forcemove = new byte[9];
 
@@ -96,6 +98,14 @@ public abstract class SyncInfo {
 
 	public byte[] hitSet2() {
 		return hitSet2;
+	}
+
+	public byte[] getHitSetNPC() {
+		return hitSetNPC;
+	}
+
+	public byte[] getHitSet2NPC() {
+		return hitSet2NPC;
 	}
 
 	public byte[] faceTileSet() {

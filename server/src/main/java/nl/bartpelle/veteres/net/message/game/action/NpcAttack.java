@@ -1,6 +1,8 @@
 package nl.bartpelle.veteres.net.message.game.action;
 
 import io.netty.channel.ChannelHandlerContext;
+import nl.bartpelle.veteres.aquickaccess.combat.Combat;
+import nl.bartpelle.veteres.aquickaccess.combat.PvMCombat;
 import nl.bartpelle.veteres.content.combat.PlayerCombat;
 import nl.bartpelle.veteres.io.RSBuffer;
 import nl.bartpelle.veteres.model.AttributeKey;
@@ -47,7 +49,9 @@ public class NpcAttack implements Action {
                 player.putattrib(AttributeKey.TARGET_TYPE, 1);
                 player.putattrib(AttributeKey.TARGET, index);
 
-                player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
+                //player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
+                new PvMCombat(player, other).start();
+
             }
         }
     }
