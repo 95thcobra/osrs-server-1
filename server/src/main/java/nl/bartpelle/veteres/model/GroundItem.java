@@ -1,5 +1,6 @@
 package nl.bartpelle.veteres.model;
 
+import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.item.Item;
 
 /**
@@ -9,25 +10,29 @@ public class GroundItem {
 
 	private final Item item;
 	private final Tile tile;
-	private final Object ownerId;
+	private final Player owner;
 	private final long spawned = System.currentTimeMillis();
 	private boolean broadcasted = false;
 
-	public GroundItem(Item item, Tile tile, Object owner) {
+	public GroundItem(Item item, Tile tile, Player owner) {
 		this.item = item;
 		this.tile = tile;
-		this.ownerId = owner;
+		this.owner = owner;
 
 		if (owner == null)
 			broadcasted = true;
+	}
+
+	public GroundItem(Item item, Tile tile) {
+		this(item, tile, null);
 	}
 
 	public Item item() {
 		return item;
 	}
 
-	public Object owner() {
-		return ownerId;
+	public Player getOwner() {
+		return owner;
 	}
 
 	public Tile tile() {

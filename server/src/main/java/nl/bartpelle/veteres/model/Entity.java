@@ -2,8 +2,10 @@ package nl.bartpelle.veteres.model;
 
 import nl.bartpelle.veteres.fs.NpcDefinition;
 import nl.bartpelle.veteres.model.entity.*;
+import nl.bartpelle.veteres.model.entity.player.EquipSlot;
 import nl.bartpelle.veteres.model.entity.player.NpcSyncInfo;
 import nl.bartpelle.veteres.model.entity.player.PlayerSyncInfo;
+import nl.bartpelle.veteres.model.item.Item;
 import nl.bartpelle.veteres.model.map.*;
 import nl.bartpelle.veteres.net.message.game.AddMessage;
 import nl.bartpelle.veteres.script.TimerKey;
@@ -355,7 +357,34 @@ public abstract class Entity implements HitOrigin {
     }
 
     public void blockHit() {
-        animate(424);
+        if (this instanceof Player) {
+            animate(getBlockAnimationPlayer());
+        } else if (this instanceof Npc) {
+            animate(getBlockAnimationNpc());
+        }
+        // animate(424);
+    }
+
+    private int getBlockAnimationPlayer() {
+        int animationId = 424;
+        Item shield = ((Player) this).equipment().get(EquipSlot.SHIELD);
+        if (shield != null) {
+            switch (shield.id()) {
+                // shields 1156
+
+                // Defenders
+                case 8850:
+                    animationId = 4177;
+                    break;
+            }
+        }
+
+        return animationId;
+    }
+
+    private int getBlockAnimationNpc() {
+        int animationId = 424;
+        return animationId;
     }
 
     public Map<Entity, Integer> damagers() {

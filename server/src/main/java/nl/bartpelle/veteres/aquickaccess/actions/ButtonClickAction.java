@@ -90,6 +90,8 @@ public class ButtonClickAction {
 
     private void handleCombatStyleSwitch() {
         switch (buttonId) {
+
+            // Attack styles
             case 3:
                 player.varps().varp(Varp.ATTACK_STYLE, 0);
                 break;
@@ -101,6 +103,11 @@ public class ButtonClickAction {
                 break;
             case 15:
                 player.varps().varp(Varp.ATTACK_STYLE, 3);
+                break;
+
+            // Special attack
+            case 30:
+                player.toggleSpecialAttack();
                 break;
         }
     }

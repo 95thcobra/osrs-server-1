@@ -2,10 +2,7 @@ package nl.bartpelle.veteres.util;
 
 import nl.bartpelle.veteres.content.interfaces.Bank;
 import nl.bartpelle.veteres.fs.ItemDefinition;
-import nl.bartpelle.veteres.model.AttributeKey;
-import nl.bartpelle.veteres.model.ChatMessage;
-import nl.bartpelle.veteres.model.Hit;
-import nl.bartpelle.veteres.model.Tile;
+import nl.bartpelle.veteres.model.*;
 import nl.bartpelle.veteres.model.entity.Npc;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.model.entity.player.Privilege;
@@ -38,6 +35,11 @@ public final class GameCommands {
 
     private static Map<String, Command> setup() {
         commands = new HashMap<>();
+
+        put(Privilege.PLAYER, "grounditem", (p, args) -> {
+           p.world().spawnGroundItem(new GroundItem(new Item(4151, 1), p.tile(), p));
+            p.message("spawned grounditem.");
+        });
 
 		/* Player commands */
         put(Privilege.PLAYER, "players", (p, args) -> {

@@ -32,7 +32,7 @@ public class ItemAction5 extends ItemAction {
 		Item item = player.inventory().get(slot);
 		if (item != null && item.id() == this.item && !player.locked() && !player.dead()) {
 			player.inventory().set(slot, null);
-			player.world().spawnGroundItem(new GroundItem(item, player.tile(), player.username()));
+			player.world().spawnGroundItem(new GroundItem(item, player.tile(), player));
 			player.sound(2739, 0);
 		}
 	}

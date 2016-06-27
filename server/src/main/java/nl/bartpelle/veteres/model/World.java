@@ -177,7 +177,7 @@ public class World {
 
             // See who's getting broadcasted!
             players().forEach(p -> {
-                if (!p.id().equals(item.owner()) && p.seesChunk(item.tile().x, item.tile().z)) {
+                if (!p.equals(item.getOwner()) && p.seesChunk(item.tile().x, item.tile().z)) {
                     p.write(new SetMapBase(p, item.tile()));
                     p.write(new AddGroundItem(item));
                 }
@@ -264,7 +264,7 @@ public class World {
         players.forEach(p -> {
             if (p.activeArea().contains(item.tile())) {
                 // Is this an item for us?
-                if (item.owner() == null || p.id().equals(item.owner()) || item.broadcasted()) {
+                if (item.getOwner() == null || p.equals(item.getOwner()) || item.broadcasted()) {
                     p.write(new SetMapBase(p, item.tile()));
                     p.write(new AddGroundItem(item));
                 }
@@ -324,7 +324,7 @@ public class World {
         for (GroundItem item : groundItems) { // Todo check for ownership
             if (item != null && area.contains(item.tile())) {
                 // Is this an item for us?
-                if (!p.id().equals(item.owner()) && !item.broadcasted()) // Not ours, and not public yet. Bye.
+                if (!p.equals(item.getOwner()) && !item.broadcasted()) // Not ours, and not public yet. Bye.
                     continue;
                 p.write(new SetMapBase(p, item.tile()));
                 p.write(new AddGroundItem(item));

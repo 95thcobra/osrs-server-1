@@ -51,33 +51,6 @@ public class PvMCombat extends Combat {
         target.putattrib(AttributeKey.LAST_DAMAGE, System.currentTimeMillis());
     }
 
-
-    private void handleMeleeCombat(int weaponId) {
-        Tile currentTile = player.tile();
-        if (!player.touches(target, currentTile) && !player.frozen() && !player.stunned()) {
-            currentTile = moveCloser();
-            player.message("Moving closer...");
-        } else {
-            player.message("Attacking...");
-            if (!player.timers().has(TimerKey.COMBAT_ATTACK)) {
-                if (player.varps().varp(Varp.SPECIAL_ENABLED) == 0 || !doMeleeSpecial()) {
-                    boolean success = AccuracyFormula.doesHit(player, target, CombatStyle.MELEE);
-
-                    int max = CombatFormula.maximumMeleeHit(player);
-                    int hit = player.world().random(max);
-
-                    target.hit(player, success ? hit : 0); // this doesnt work
-
-                    player.animate(EquipmentInfo.attackAnimationFor(player));
-                    player.timers().register(TimerKey.COMBAT_ATTACK, player.world().equipmentInfo().weaponSpeed(weaponId));
-                }
-                player.varps().varp(Varp.SPECIAL_ENABLED, 0);
-            }
-        }
-    }
-    private boolean doMeleeSpecial() {
-        return false;
-    }
     private void handleRangeCombat(int weaponId, String ammoName, int weaponType) {
         Tile currentTile = player.tile();
 

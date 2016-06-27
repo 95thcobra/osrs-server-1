@@ -45,39 +45,11 @@ public class PvPCombat extends Combat {
             handleRangeCombat(weaponId, ammoName, weaponType);
         } else {
             getEntity().message("meleeeing...");
-            handleMeleeCombat( weaponId);
+            handleMeleeCombat(weaponId);
         }
 
         getTarget().putattrib(AttributeKey.LAST_DAMAGER, getEntity());
         getTarget().putattrib(AttributeKey.LAST_DAMAGE, System.currentTimeMillis());
-    }
-
-    private void handleMeleeCombat( int weaponId) {
-        Tile currentTile = getEntity().tile();
-        if (!getEntity().touches(getTarget(), currentTile) && !getEntity().frozen() && !getEntity().stunned()) {
-            currentTile = moveCloser();
-            getEntity().message("Moving closer...");
-        }
-
-        if (getEntity().touches(getTarget(), currentTile)) {
-            getEntity().message("Attacking...");
-            if (!getEntity().timers().has(TimerKey.COMBAT_ATTACK)) {
-                if (((Player) getEntity()).varps().varp(Varp.SPECIAL_ENABLED) == 0 || !doMeleeSpecial()) {
-                    boolean success = AccuracyFormula.doesHit(((Player) getEntity()), getTarget(), CombatStyle.MELEE);
-
-                    int max = CombatFormula.maximumMeleeHit(((Player) getEntity()));
-                    int hit = getEntity().world().random(max);
-
-                    getTarget().hit(getEntity(), success ? hit : 0);
-
-                    getEntity().animate(EquipmentInfo.attackAnimationFor(((Player) getEntity())));
-                    getEntity().timers().register(TimerKey.COMBAT_ATTACK, getEntity().world().equipmentInfo().weaponSpeed(weaponId));
-
-
-                }
-                ((Player) getEntity()).varps().varp(Varp.SPECIAL_ENABLED, 0);
-            }
-        }
     }
 
     private void handleRangeCombat(int weaponId, String ammoName, int weaponType) {
@@ -167,6 +139,6 @@ public class PvPCombat extends Combat {
     }
 
     private boolean doMeleeSpecial() {
-        return false;
+        return player.isSpecialAttackEnabled();
     }
 }

@@ -3,6 +3,7 @@ package nl.bartpelle.veteres.model.entity;
 import com.google.common.base.MoreObjects;
 import io.netty.channel.Channel;
 import nl.bartpelle.veteres.aquickaccess.events.PlayerDeathEvent;
+import nl.bartpelle.veteres.aquickaccess.events.SpecialEnergyRegeneration;
 import nl.bartpelle.veteres.aquickaccess.events.TeleportEvent;
 import nl.bartpelle.veteres.content.mechanics.Death;
 import nl.bartpelle.veteres.crypto.IsaacRand;
@@ -20,6 +21,7 @@ import nl.bartpelle.veteres.script.Timer;
 import nl.bartpelle.veteres.script.TimerKey;
 import nl.bartpelle.veteres.services.serializers.PlayerSerializer;
 import nl.bartpelle.veteres.util.StaffData;
+import nl.bartpelle.veteres.util.Varp;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Iterator;
@@ -141,6 +143,29 @@ public class Player extends Entity {
         this.inputHelper = new InputHelper(this);
 
         looks().update();
+
+        ///////sj
+        resetSpecialEnergy();
+    }
+
+    public void resetSpecialEnergy() {
+        varps.varp(Varp.SPECIAL_ENERGY, 1000);
+    }
+
+    public void toggleSpecialAttack() {
+        varps.varp(Varp.SPECIAL_ENABLED, isSpecialAttackEnabled() ? 0 : 1);
+    }
+
+    public boolean isSpecialAttackEnabled() {
+        return varps.varp(Varp.SPECIAL_ENABLED) == 1;
+    }
+
+    public int getSpecialEnergyAmount() {
+        return varps.varp(Varp.SPECIAL_ENERGY);
+    }
+
+    public void setSpecialEnergyAmount(int amount) {
+        varps.varp(Varp.SPECIAL_ENERGY, Math.min(1000, amount));
     }
 
     /**
@@ -165,7 +190,7 @@ public class Player extends Entity {
         //world.server().scriptRepository().triggerLogin(this);
 
         // Execute groovy plugin
-        world.getPluginHandler().execute(this, LoginPlugin.class, new LoginPlugin());
+        //world.getPluginHandler().execute(this, LoginPlugin.class, new LoginPlugin());
 
         varps.sync(1055);
 
@@ -178,6 +203,11 @@ public class Player extends Entity {
 
         // Sync varps
         varps.syncNonzero();
+
+        ///////////sj
+
+        // Start energy regenerate timer
+        timers().register(TimerKey.SPECIAL_ENERGY_RECHARGE, 50);
     }
 
     public void event(Event event) {
@@ -412,6 +442,13 @@ public class Player extends Entity {
             }
         }
 
+        // Regenerate special energy
+        if (!timers().has(TimerKey.SPECIAL_ENERGY_RECHARGE)) {
+            int currentEnergy = varps().varp(Varp.SPECIAL_ENERGY);
+            varps().varp(Varp.SPECIAL_ENERGY, Math.min(1000, currentEnergy + 100));
+            timers.register(TimerKey.SPECIAL_ENERGY_RECHARGE, 50);
+        }
+
         // Region enter and leave triggers
         int lastregion = attrib(AttributeKey.LAST_REGION, -1);
         if (lastregion != tile.region()) {
@@ -482,7 +519,7 @@ public class Player extends Entity {
 
     @Override
     protected void die() {
-       // lock();
+        // lock();
         world.getEventHandler().addEvent(this, new PlayerDeathEvent(this));
         //world.server().scriptExecutor().executeScript(this, Death.script);
     }

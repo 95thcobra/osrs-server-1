@@ -23,7 +23,6 @@ public class ItemsOnDeath {
 		Collections.addAll(items, target.equipment().copy());
 
 		Collections.sort(items, (o1, o2) -> {
-
 			if (o1 == null || o2 == null)
 				return 0;
 
@@ -46,11 +45,14 @@ public class ItemsOnDeath {
 			}
 		}
 
+		killer.message("SIZE:"+items.size());
+
 		items.stream().filter(i -> i != null && !keptItems.contains(i)).forEach(i -> {
-			killer.world().spawnGroundItem(new GroundItem(i, target.tile(), killer.username()));
+			killer.world().spawnGroundItem(new GroundItem(i, target.tile(), killer));
+			killer.message("ITEM"+i.id());
 		});
 
-		killer.world().spawnGroundItem(new GroundItem(new Item(526), target.tile(), killer.username()));
+		killer.world().spawnGroundItem(new GroundItem(new Item(526), target.tile(), killer));
 	}
 
 }
