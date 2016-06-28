@@ -1,6 +1,5 @@
 package nl.bartpelle.veteres.util;
 
-import nl.bartpelle.veteres.content.interfaces.Bank;
 import nl.bartpelle.veteres.fs.ItemDefinition;
 import nl.bartpelle.veteres.model.*;
 import nl.bartpelle.veteres.model.entity.Npc;
@@ -36,9 +35,12 @@ public final class GameCommands {
     private static Map<String, Command> setup() {
         commands = new HashMap<>();
 
-        put(Privilege.PLAYER, "grounditem", (p, args) -> {
-           p.world().spawnGroundItem(new GroundItem(new Item(4151, 1), p.tile(), p));
-            p.message("spawned grounditem.");
+        put(Privilege.PLAYER, "clear", (p, args) -> {
+            p.interfaces().clearQuestInterface();
+            p.message("cleared .");
+        });
+        put(Privilege.PLAYER, "title", (p, args) -> {
+            p.interfaces().sendInterfaceString(274, 10, "Edgeville"); // First big string
         });
 
 		/* Player commands */
@@ -119,13 +121,13 @@ public final class GameCommands {
         });
 
         put(Privilege.ADMIN, "loopvarbit", (p, args) -> {
-            for(int i =0; i < 10000; i ++) {
+            for (int i = 0; i < 10000; i++) {
                 p.varps().varbit(i, 1);
             }
         });
 
         put(Privilege.ADMIN, "loopvarp", (p, args) -> {
-            for(int i =0; i < 5000; i ++) {
+            for (int i = 0; i < 5000; i++) {
                 p.varps().varp(i, 1);
             }
         });
@@ -267,13 +269,14 @@ public final class GameCommands {
         });
         put(Privilege.ADMIN, "debugon", (p, args) -> p.putattrib(AttributeKey.DEBUG, true));
         put(Privilege.ADMIN, "debugoff", (p, args) -> p.putattrib(AttributeKey.DEBUG, false));
+
         put(Privilege.PLAYER, "master", (p, args) -> {
             if (inWilderness(p)) {
                 p.message("You cannot do this while in the wilderness.");
                 return;
             }
             for (int i = 0; i < Skills.SKILL_COUNT; i++) {
-                p.skills().addXp(i, 15_000_000);
+                p.skills().addXp(i, 13034431);
             }
         });
 
@@ -392,13 +395,13 @@ public final class GameCommands {
         });
 
         put(Privilege.PLAYER, "pkp", (p, args) -> p.message("You currently have " + p.attrib(AttributeKey.PK_POINTS, 0) + " PK points."));
-        put(Privilege.PLAYER, "openbank", (p, args) -> {
+        /*put(Privilege.PLAYER, "openbank", (p, args) -> {
             if (inWilderness(p)) {
                 p.message("You cannot do this while in the wilderness.");
                 return;
             }
             Bank.open(p);
-        });
+        });*/
 
         put(Privilege.ADMIN, "sound", (p, args) -> p.write(new PlaySound(Integer.parseInt(args[0]), 0)));
         put(Privilege.ADMIN, "removenpcs", (p, args) -> p.world().npcs().forEach(n -> p.world().npcs().remove(n)));

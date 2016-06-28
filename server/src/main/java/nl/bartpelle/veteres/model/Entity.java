@@ -1,13 +1,13 @@
 package nl.bartpelle.veteres.model;
 
-import nl.bartpelle.veteres.fs.NpcDefinition;
 import nl.bartpelle.veteres.model.entity.*;
 import nl.bartpelle.veteres.model.entity.player.EquipSlot;
 import nl.bartpelle.veteres.model.entity.player.NpcSyncInfo;
 import nl.bartpelle.veteres.model.entity.player.PlayerSyncInfo;
+import nl.bartpelle.veteres.model.entity.player.Skills;
 import nl.bartpelle.veteres.model.item.Item;
 import nl.bartpelle.veteres.model.map.*;
-import nl.bartpelle.veteres.net.message.game.AddMessage;
+import nl.bartpelle.veteres.net.message.game.PlaySound;
 import nl.bartpelle.veteres.script.TimerKey;
 import nl.bartpelle.veteres.script.TimerRepository;
 import nl.bartpelle.veteres.util.CombatStyle;
@@ -34,6 +34,9 @@ public abstract class Entity implements HitOrigin {
     private Map<Entity, Integer> damagers = new HashMap<>();
 
     private LockType lock = LockType.NONE;
+
+    ////// sj
+    //private CombatBuilder combatBuilder = new CombatBuilder();
 
     /**
      * Information on our synchronization
@@ -287,6 +290,17 @@ public abstract class Entity implements HitOrigin {
         return target.canExit(from.x, from.z, 1, clipAround, e.tile.x - 5, e.tile.z - 5);
     }
 
+    public Tile moveCloser(Entity target) {
+        pathQueue().clear();
+
+        int steps = pathQueue().running() ? 2 : 1;
+        int otherSteps = target.pathQueue().running() ? 2 : 1;
+
+        Tile otherTile = target.pathQueue().peekAfter(otherSteps) == null ? target.tile() : target.pathQueue().peekAfter(otherSteps).toTile();
+        stepTowards(target, otherTile, 25);
+        return pathQueue().peekAfter(steps - 1) == null ? tile() : pathQueue().peekAfter(steps - 1).toTile();
+    }
+
     public boolean locked() {
         return lock == LockType.FULL;
     }
@@ -349,7 +363,29 @@ public abstract class Entity implements HitOrigin {
             }
         }
 
+        // 1.33 on controlled for each skill.
+        if (origin instanceof Player) {
+            ((Player) origin).skills().addXp(Skills.ATTACK, hit * 4);
+            playAttackSound((Player) origin);
+        }
+
         return h;
+    }
+
+    private void playAttackSound(Player player) {
+        Item item = player.equipment().get(EquipSlot.WEAPON);
+        int soundId = -1;
+        if (item == null) {
+            soundId = 24;
+        } else {
+            switch (item.id()) {
+                case 4151:
+                case 12006:
+                    soundId = 2720;
+                    break;
+            }
+        }
+        player.write(new PlaySound(soundId));
     }
 
     public Hit hit(HitOrigin origin, int hit, Hit.Type type) {
@@ -359,10 +395,26 @@ public abstract class Entity implements HitOrigin {
     public void blockHit() {
         if (this instanceof Player) {
             animate(getBlockAnimationPlayer());
+            playBlockSound((Player) this);
         } else if (this instanceof Npc) {
             animate(getBlockAnimationNpc());
         }
         // animate(424);
+    }
+
+    private void playBlockSound(Player player) {
+        Item item = player.equipment().get(EquipSlot.SHIELD);
+        int soundId = -1;
+        if (item == null) {
+            soundId = 23;
+        } else {
+            switch (item.id()) {
+                case 8850:
+                    soundId = 15;
+                    break;
+            }
+        }
+        player.write(new PlaySound(soundId));
     }
 
     private int getBlockAnimationPlayer() {
@@ -406,13 +458,15 @@ public abstract class Entity implements HitOrigin {
 
     public void stopActions(boolean cancelMoving) {
         this.message("stopping actions...");
-        world.getEventHandler().stopEvents(this);
+        world.getEventHandler().stopCancellableEvents(this);
         world.server().scriptExecutor().interruptFor(this);
         sync.faceEntity(null);
         //   animate(-1);
         //   graphic(-1);
         if (cancelMoving)
             pathQueue.clear();
+
+        clearattrib(AttributeKey.TARGET);
     }
 
     public void face(Entity e) {

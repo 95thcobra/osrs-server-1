@@ -115,6 +115,11 @@ public class World {
         }
     }
 
+
+    public int getPlayersOnline() {
+        return players().size();
+    }
+
     public int id() {
         return id;
     }

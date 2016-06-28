@@ -1,5 +1,8 @@
 package nl.bartpelle.veteres.model.entity.player;
 
+import nl.bartpelle.veteres.aquickaccess.Constants;
+import nl.bartpelle.veteres.event.Event;
+import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.*;
 import nl.bartpelle.veteres.util.SettingsBuilder;
@@ -192,5 +195,36 @@ public class Interfaces {
 
     public void sendInterfaceString(int interfaceId, int stringId, String text) {
         player.write(new InterfaceText(interfaceId, stringId, text));
+    }
+
+    public void sendQuestTabTitle() {
+        player.interfaces().sendInterfaceString(274, 10, "Players online: " + player.world().getPlayersOnline());
+    }
+
+    // Cheap hack for quest points:0 bug
+    public void sendQuestTabTitleDelayed() {
+        player.world().getEventHandler().addEvent(player, 1, false, new Event() {
+            @Override
+            public void execute(EventContainer container) {
+                sendQuestTabTitle(); // First big string
+                container.stop();
+            }
+        });
+    }
+
+    public void clearQuestInterface() {
+        final int questTabInterfaceId = 274;
+
+        sendQuestTabTitleDelayed();
+        player.interfaces().sendInterfaceString(questTabInterfaceId, 14, "Quick-gear"); // Second big string
+
+        // Small strings start.      COLORS <col=00AEDB>
+        player.interfaces().sendInterfaceString(questTabInterfaceId, 15, "Melee gear");
+        player.interfaces().sendInterfaceString(questTabInterfaceId, 16, "Range gear");
+        player.interfaces().sendInterfaceString(questTabInterfaceId, 17, "Hybrid gear");
+
+        for (int child = 18; child < 143; child++) {
+            player.write(new InterfaceText(questTabInterfaceId, child, ""));
+        }
     }
 }

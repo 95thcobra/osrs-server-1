@@ -41,7 +41,7 @@ public enum AttributeKey {
 	/**
 	 * Key used to indicate which ground item we are trying to take.
 	 */
-	GROUNDITEM_TARGET,
+	//GROUNDITEM_TARGET,
 
 	/**
 	 * Key used to indicate which map object we are interacting with.

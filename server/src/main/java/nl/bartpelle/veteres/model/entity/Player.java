@@ -3,9 +3,7 @@ package nl.bartpelle.veteres.model.entity;
 import com.google.common.base.MoreObjects;
 import io.netty.channel.Channel;
 import nl.bartpelle.veteres.aquickaccess.events.PlayerDeathEvent;
-import nl.bartpelle.veteres.aquickaccess.events.SpecialEnergyRegeneration;
 import nl.bartpelle.veteres.aquickaccess.events.TeleportEvent;
-import nl.bartpelle.veteres.content.mechanics.Death;
 import nl.bartpelle.veteres.crypto.IsaacRand;
 import nl.bartpelle.veteres.event.Event;
 import nl.bartpelle.veteres.event.EventContainer;
@@ -16,11 +14,11 @@ import nl.bartpelle.veteres.model.item.ItemContainer;
 import nl.bartpelle.veteres.model.entity.player.*;
 import nl.bartpelle.veteres.net.future.ClosingChannelFuture;
 import nl.bartpelle.veteres.net.message.game.*;
-import nl.bartpelle.veteres.plugin.impl.LoginPlugin;
 import nl.bartpelle.veteres.script.Timer;
 import nl.bartpelle.veteres.script.TimerKey;
 import nl.bartpelle.veteres.services.serializers.PlayerSerializer;
 import nl.bartpelle.veteres.util.StaffData;
+import nl.bartpelle.veteres.util.Varbit;
 import nl.bartpelle.veteres.util.Varp;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -84,7 +82,6 @@ public class Player extends Entity {
      * The ISAAC Random Generator for outgoing packets.
      */
     private IsaacRand outrand;
-
 
     /**
      * A list of pending actions which are decoded at the next game cycle.
@@ -208,6 +205,9 @@ public class Player extends Entity {
 
         // Start energy regenerate timer
         timers().register(TimerKey.SPECIAL_ENERGY_RECHARGE, 50);
+
+        // quest tab
+        interfaces().clearQuestInterface();
     }
 
     public void event(Event event) {
@@ -549,6 +549,9 @@ public class Player extends Entity {
     }
 
     public void teleportWithAnimation(Tile tile) {
+        if (locked()) {
+            return;
+        }
         world().getEventHandler().addEvent(this, new TeleportEvent(this, tile));
     }
 }

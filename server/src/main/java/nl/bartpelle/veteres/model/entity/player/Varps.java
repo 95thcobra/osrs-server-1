@@ -1,6 +1,8 @@
 package nl.bartpelle.veteres.model.entity.player;
 
-import nl.bartpelle.veteres.content.mechanics.Prayers;
+import nl.bartpelle.veteres.aquickaccess.Constants;
+import nl.bartpelle.veteres.event.Event;
+import nl.bartpelle.veteres.event.EventContainer;
 import nl.bartpelle.veteres.fs.VarbitDefinition;
 import nl.bartpelle.veteres.model.entity.Player;
 import nl.bartpelle.veteres.net.message.game.SetVarp;
@@ -16,68 +18,77 @@ import java.util.Set;
  */
 public class Varps {
 
-	public static final int[] BIT_SIZES = new int[32];
-	static {
-		for (int numbits = 0, size = 2; numbits < 32; numbits++) {
-			BIT_SIZES[numbits] = size - 1;
-			size += size;
-		}
-	}
+    public static final int[] BIT_SIZES = new int[32];
 
-	private Player player;
-	private int[] varps = new int[2000];
+    static {
+        for (int numbits = 0, size = 2; numbits < 32; numbits++) {
+            BIT_SIZES[numbits] = size - 1;
+            size += size;
+        }
+    }
 
-	public Varps(Player player) {
-		this.player = player;
-	}
+    private Player player;
+    private int[] varps = new int[2000];
 
-	public void varp(int id, int v) {
-		varps[id] = v;
-		sync(id);
-	}
+    public Varps(Player player) {
+        this.player = player;
+    }
 
-	public int varp(int id) {
-		return varps[id];
-	}
+    public void varp(int id, int v) {
+        varps[id] = v;
+        sync(id);
+    }
 
-	public void varbit(int id, int v) {
-		VarbitDefinition def = player.world().definitions().get(VarbitDefinition.class, id);
-		if (def != null) {
-			int area = BIT_SIZES[def.endbit - def.startbit] << def.startbit;
-			varps[def.varp] = (varps[def.varp] & ~area) | (area & (v << def.startbit));
+    public int varp(int id) {
+        return varps[id];
+    }
 
-			sync(def.varp);
-		}
-	}
+    public void varbit(int id, int v) {
+        VarbitDefinition def = player.world().definitions().get(VarbitDefinition.class, id);
+        if (def != null) {
+            int area = BIT_SIZES[def.endbit - def.startbit] << def.startbit;
+            varps[def.varp] = (varps[def.varp] & ~area) | (area & (v << def.startbit));
 
-	public int varbit(int id) {
-		VarbitDefinition def = player.world().definitions().get(VarbitDefinition.class, id);
-		if (def != null) {
-			return (varps[def.varp] >> def.startbit) & BIT_SIZES[def.endbit - def.startbit];
-		}
+            sync(def.varp);
+        }
+    }
 
-		return 0;
-	}
+    public int varbit(int id) {
+        VarbitDefinition def = player.world().definitions().get(VarbitDefinition.class, id);
+        if (def != null) {
+            return (varps[def.varp] >> def.startbit) & BIT_SIZES[def.endbit - def.startbit];
+        }
 
-	public void sync(int id) {
-		player.write(new SetVarp(id, varps[id]));
-	}
+        return 0;
+    }
 
-	public int[] raw() {
-		return varps;
-	}
+    public void sync(int id) {
+        player.write(new SetVarp(id, varps[id]));
+        player.world().getEventHandler().addEvent(player, 1, false, new Event() {
+            @Override
+            public void execute(EventContainer container) {
+                player.interfaces().sendQuestTabTitle(); // First big string
+                container.stop();
+            }
+        });
+    }
 
-	public void presave() {
-		// Turn off prayers
-		Prayers.disableAllPrayers(player);
-		varp(Varp.SPECIAL_ENABLED, 0);
-	}
+    public int[] raw() {
+        return varps;
+    }
 
-	public void syncNonzero() {
-		for (int i=0; i<2000; i++) {
-			if (varps[i] != 0)
-				sync(i);
-		}
-	}
+    public void presave() {
+        // Turn off prayers
+        player.skills().disableAllPrayers();
+       // Prayers.disableAllPrayers(player);
+        varp(Varp.SPECIAL_ENABLED, 0);
+    }
+
+    public void syncNonzero() {
+        for (int i = 0; i < 2000; i++) {
+            if (varps[i] != 0)
+                sync(i);
+        }
+    }
 
 }

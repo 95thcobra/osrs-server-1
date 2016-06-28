@@ -1,8 +1,15 @@
 package nl.bartpelle.veteres.aquickaccess.actions;
 
 import nl.bartpelle.veteres.aquickaccess.Locations;
+import nl.bartpelle.veteres.aquickaccess.combat.Combat;
+import nl.bartpelle.veteres.model.AttributeKey;
+import nl.bartpelle.veteres.model.Entity;
 import nl.bartpelle.veteres.model.entity.Player;
+import nl.bartpelle.veteres.model.entity.player.EquipSlot;
+import nl.bartpelle.veteres.model.item.Item;
 import nl.bartpelle.veteres.net.message.game.InvokeScript;
+import nl.bartpelle.veteres.script.TimerKey;
+import nl.bartpelle.veteres.util.CombatFormula;
 import nl.bartpelle.veteres.util.SettingsBuilder;
 import nl.bartpelle.veteres.util.Varbit;
 import nl.bartpelle.veteres.util.Varp;
@@ -58,6 +65,18 @@ public class ButtonClickAction {
                 handleSpellBook();
                 break;
 
+            // Run toggle, in settings
+            case 261:
+                if (buttonId == 66) {
+                    player.pathQueue().toggleRunning();
+                }
+                break;
+
+            // Quest tab
+            case 274:
+                handleQuestTab();
+                break;
+
             // Options: equipment stats, etc.
             case 387:
                 handleOptionsTabs();
@@ -72,8 +91,28 @@ public class ButtonClickAction {
 
     ////////////////
 
+    private void handleQuestTab() {
+        switch (buttonId) {
+
+            // Melee gear
+            case 15:
+                player.message("Spawned melee gear.");
+                break;
+
+            // Range gear
+            case 16:
+                player.message("Spawned range gear.");
+                break;
+
+            // Hybrid gear
+            case 17:
+                player.message("Spawned hybrid gear.");
+                break;
+        }
+    }
+
     private void handleOptionsTabs() {
-        switch(buttonId) {
+        switch (buttonId) {
 
             // Equipment stats
             case 17:
@@ -81,11 +120,70 @@ public class ButtonClickAction {
                 player.equipment().refreshEquipmentStatsInterface(player);
                 break;
 
+            // Unequip
+            case 6:
+                unequip(EquipSlot.HEAD);
+                break;
+            case 7:
+                unequip(EquipSlot.CAPE);
+                break;
+
+            case 8:
+                unequip(EquipSlot.AMULET);
+                break;
+
+            case 9:
+                unequip(EquipSlot.WEAPON);
+                break;
+
+            case 10:
+                unequip(EquipSlot.BODY);
+                break;
+
+            case 11:
+                unequip(EquipSlot.SHIELD);
+                break;
+
+            case 12:
+                unequip(EquipSlot.LEGS);
+                break;
+
+            case 13:
+                unequip(EquipSlot.HANDS);
+                break;
+
+            case 14:
+                unequip(EquipSlot.FEET);
+                break;
+            case 15:
+                unequip(EquipSlot.RING);
+                break;
+            case 16:
+                unequip(EquipSlot.AMMO);
+                break;
+
             // Items on death
             case 21:
                 player.interfaces().sendMain(102);
                 break;
         }
+    }
+
+    // REMOVE EQUIPMENT ITEM
+    private void unequip(int slot) {
+        if (option != 0) {
+            return;
+        }
+        if (player.locked()) {
+            return;
+        }
+        Item item = player.equipment().get(slot);
+        if (!player.inventory().add(item).success()) {
+            player.message("You don't have enough inventory space to do that.");
+            return;
+        }
+        player.equipment().set(slot, null);
+        player.equipment().refreshEquipmentStatsInterface(player);
     }
 
     private void handleCombatStyleSwitch() {
@@ -107,9 +205,27 @@ public class ButtonClickAction {
 
             // Special attack
             case 30:
+                if (isGmaulAttack()) {
+                    return;
+                }
                 player.toggleSpecialAttack();
                 break;
         }
+    }
+
+    private boolean isGmaulAttack() {
+        Item weapon = player.equipment().get(EquipSlot.WEAPON);
+        int weaponId = weapon == null ? -1 : weapon.id();
+
+        if (weaponId != 4153) {
+            return false;
+        }
+
+        Entity target = player.attrib(AttributeKey.TARGET);
+        if (target != null) {
+            Combat.handleGraniteMaul(player, target);
+        }
+        return true;
     }
 
     private void XPDropToggles() {
@@ -187,9 +303,15 @@ public class ButtonClickAction {
         }
         switch (buttonId) {
 
+            // Edge teleport
+            case 1:
+                player.message("Teleporting to edgeville...");
+                player.teleportWithAnimation(Locations.EDGEVILLE.getTile());
+                break;
+
             // Varrock teleport
             case 16:
-                player.message("Teleporting to varrock.");
+                player.message("Teleporting to varrock...");
                 player.teleportWithAnimation(Locations.VARROCK.getTile());
                 break;
         }

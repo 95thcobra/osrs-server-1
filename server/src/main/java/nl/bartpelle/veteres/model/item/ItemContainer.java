@@ -87,6 +87,14 @@ public class ItemContainer {
         return dirty;
     }
 
+    public Result add(int itemId) {
+        return add(new Item(itemId), true);
+    }
+
+    public Result add(Item item) {
+        return add(item, true);
+    }
+
     public Result add(Item item, boolean force) {
         if (item.amount() < 0)
             return new Result(item.amount(), 0);
@@ -139,6 +147,14 @@ public class ItemContainer {
             makeDirty();
             return new Result(item.amount(), item.amount() - left);
         }
+    }
+
+    public Result remove(int itemId) {
+        return remove(new Item(itemId), true);
+    }
+
+    public Result remove(Item item) {
+        return remove(item, true);
     }
 
     public Result remove(Item item, boolean force) {

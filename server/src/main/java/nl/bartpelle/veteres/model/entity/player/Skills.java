@@ -72,11 +72,11 @@ public class Skills {
     }
 
     public void addXp(int skill, double amt) {
-        if (skill == ATTACK || skill == STRENGTH || skill == DEFENCE || skill == RANGED || skill == MAGIC || skill == HITPOINTS || skill == PRAYER) {
+        /*if (skill == ATTACK || skill == STRENGTH || skill == DEFENCE || skill == RANGED || skill == MAGIC || skill == HITPOINTS || skill == PRAYER) {
             amt *= player.world().combatMultiplier();
         } else {
             amt *= player.world().skillingMultiplier();
-        }
+        }*/
 
         int oldLevel = xpToLevel((int) xps[skill]);
         xps[skill] = Math.min(200000000, xps[skill] + amt);
@@ -171,6 +171,12 @@ public class Skills {
             // Make the player's attack panel up to date
             player.updateWeaponInterface();
         }
+    }
+
+    public void disableAllPrayers() {
+        player.varps().varbit(Varbit.PROTECT_FROM_MELEE, 0);
+        player.varps().varbit(Varbit.PROTECT_FROM_MISSILES, 0);
+        player.varps().varbit(Varbit.PROTECT_FROM_MAGIC, 0);
     }
 
     public int combatLevel() {

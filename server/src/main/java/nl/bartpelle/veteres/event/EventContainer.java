@@ -13,13 +13,15 @@ public class EventContainer {
     private int ticks;
     private Event event;
     private int cyclesPassed;
+    private boolean cancellable;
 
-    public EventContainer(Entity entity, int ticks, Event event) {
+    public EventContainer(Entity entity, int ticks, boolean cancellable, Event event) {
         this.entity = entity;
         this.event = event;
         this.isRunning = true;
         this.cyclesPassed = 0;
         this.ticks = ticks;
+        this.cancellable = cancellable;
     }
 
     public void execute() {
@@ -48,5 +50,9 @@ public class EventContainer {
 
     public boolean isRunning() {
         return isRunning;
+    }
+
+    public boolean isCancellable() {
+        return cancellable;
     }
 }

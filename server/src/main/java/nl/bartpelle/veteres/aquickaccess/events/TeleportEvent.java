@@ -22,9 +22,6 @@ public class TeleportEvent extends Event {
 
     @Override
     public void execute(EventContainer container) {
-        if (tick > 4) {
-            stop();
-        }
         switch (tick) {
             case 0:
                 player.graphic(111, 92, 0);
@@ -35,7 +32,10 @@ public class TeleportEvent extends Event {
                 break;
             case 4:
                 player.animate(715);
+                break;
+            case 5:
                 stop();
+                container.stop();
                 break;
         }
         tick++;

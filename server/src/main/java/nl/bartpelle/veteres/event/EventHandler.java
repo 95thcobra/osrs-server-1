@@ -31,7 +31,11 @@ public class EventHandler {
     }
 
     public void addEvent(Entity entity, int ticks, Event event) {
-        addEvent(new EventContainer(entity, ticks, event));
+        addEvent(entity, ticks, true, event);
+    }
+
+    public void addEvent(Entity entity, int ticks, boolean cancellable, Event event) {
+        addEvent(new EventContainer(entity, ticks, cancellable, event));
     }
 
     public void addEvent(EventContainer event) {
@@ -63,6 +67,14 @@ public class EventHandler {
     public void stopEvents(Entity entity) {
         for (EventContainer c : events) {
             if (c.getEntity() == entity) {
+                c.stop();
+            }
+        }
+    }
+
+    public void stopCancellableEvents(Entity entity) {
+        for (EventContainer c : events) {
+            if (c.getEntity() == entity && c.isCancellable()) {
                 c.stop();
             }
         }

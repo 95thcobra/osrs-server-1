@@ -68,6 +68,11 @@ public abstract class Combat {
             return;
         }
 
+        // Gmaul is handled in buttonclick now
+      /*  if (entity instanceof Player && ((Player) entity).isSpecialAttackEnabled() && handleGraniteMaul((Player) entity, weaponId)) {
+            return;
+        }*/
+
         // Check timer.
         if (!getEntity().timers().has(TimerKey.COMBAT_ATTACK)) {
 
@@ -88,6 +93,46 @@ public abstract class Combat {
         }
     }
 
+    public static void handleGraniteMaul(Player player, Entity target) {
+        if (player.getSpecialEnergyAmount() < 50 * 10) {
+            player.message("You do not have enough special energy.");
+            return;
+        }
+
+        if (!player.touches(target, player.tile())) {
+            return;
+        }
+
+        player.setSpecialEnergyAmount(player.getSpecialEnergyAmount() - (50 * 10));
+
+        player.animate(1667);
+        player.graphic(340, 92, 0);
+
+        double max = CombatFormula.maximumMeleeHit(player);
+        int hit = player.world().random().nextInt((int) Math.round(max));
+        target.hit(player, hit);
+        player.timers().register(TimerKey.COMBAT_ATTACK, target.world().equipmentInfo().weaponSpeed(4153));
+    }
+
+    /*public static boolean handleGraniteMaul(Player player, int weaponId) {
+        if (weaponId != 4153) {
+            return false;
+        }
+
+        if (!drainSpecialEnergy(player, 50)) {
+            return false;
+        }
+
+        player.animate(1667);
+        player.graphic(340, 92, 0);
+
+        double max = CombatFormula.maximumMeleeHit(player);
+        int hit = player.world().random().nextInt((int) Math.round(max));
+        target.hit(player, hit);
+        getEntity().timers().register(TimerKey.COMBAT_ATTACK, getEntity().world().equipmentInfo().weaponSpeed(weaponId));
+        return true;
+    }*/
+
     private void doMeleeSpecial(Player player, int weaponId) {
         switch (weaponId) {
 
@@ -102,9 +147,9 @@ public abstract class Combat {
                 player.animate(1062);
                 player.graphic(252, 92, 0);
 
-                double max = CombatFormula.maximumMeleeHit(player) * 1.1;
-                int hit = player.world().random().nextInt((int)Math.round(max));
-                int hit2 = player.world().random().nextInt((int)Math.round(max));
+                double max = CombatFormula.maximumMeleeHit(player) * 1.15;
+                int hit = player.world().random().nextInt((int) Math.round(max));
+                int hit2 = player.world().random().nextInt((int) Math.round(max));
 
                 target.hit(player, hit);
                 target.hit(player, hit2);

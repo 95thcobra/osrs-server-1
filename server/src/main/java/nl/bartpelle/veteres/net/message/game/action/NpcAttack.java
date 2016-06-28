@@ -47,7 +47,7 @@ public class NpcAttack implements Action {
                 player.face(other);
 
                 player.putattrib(AttributeKey.TARGET_TYPE, 1);
-                player.putattrib(AttributeKey.TARGET, index);
+                player.putattrib(AttributeKey.TARGET, /*index*/ other);
 
                 //player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
                 new PvMCombat(player, other).start();

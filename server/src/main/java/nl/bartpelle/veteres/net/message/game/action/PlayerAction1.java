@@ -43,7 +43,7 @@ public class PlayerAction1 implements Action {
                 }
 
                 player.putattrib(AttributeKey.TARGET_TYPE, 0);
-                player.putattrib(AttributeKey.TARGET, index);
+                player.putattrib(AttributeKey.TARGET, /*index*/other);
 
               // player.world().server().scriptExecutor().executeScript(player, PlayerCombat.script);
                 new PvPCombat(player, other).start();
